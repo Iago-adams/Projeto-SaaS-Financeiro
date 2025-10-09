@@ -1,0 +1,1 @@
+#DEVE ESTAR VAZIU, existe apenas para transformar a pasta auth em um package
