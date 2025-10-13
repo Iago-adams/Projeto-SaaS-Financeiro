@@ -1,0 +1,1 @@
+# Esse pacote não tera nenhum arquivo html, ele vai servir para criar as conecções com as APIs e também a classe de cripotografia
