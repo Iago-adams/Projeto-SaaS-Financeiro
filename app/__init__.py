@@ -16,9 +16,11 @@ def create_app(config_class=Config):
     migrate.init_app(app, db)
     login_manager.init_app(app)
     
+    #Import das blueprints
+    from app.auth.routes import auth_bp
+
     #Registro das blueprints
-    #
-    #inicialização das blueprints devem ficar aqui, não fiz porque eu ainda não exatamente como funciona (é a proxima coisa que eu vou estudar)
-    #
+    app.register_blueprint()
+        
     
     return app
