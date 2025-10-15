@@ -1,5 +1,6 @@
 from flask import Blueprint
-from models import User
+from app.models import User
+from forms import LoginForm
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -7,5 +8,4 @@ auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 def login():
 
     
-
     return
