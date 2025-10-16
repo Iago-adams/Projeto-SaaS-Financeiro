@@ -1,7 +1,7 @@
 #init padrão onde esta centraluizada todas as inicializações
 from flask import Flask
 from . import config
-from .extensions import db, migrate, login_manager
+from .extensions import db, migrate, login_manager, mail
 from .models import User
 #só pra explicar o ponto ajuda o flask a saber que o arquivos estão nesta mesma pasta o que ajuda na velocidade
 #explicação tecnica pro ponto é que ele manda o flask procurar no mesmo pacote basicamente
@@ -16,6 +16,7 @@ def create_app(config_class=config):
     db.init_app(app)
     migrate.init_app(app, db)
     login_manager.init_app(app)
+    mail.init_app(app)
     
     #Import das blueprints
     from app.auth.routes import auth_bp
