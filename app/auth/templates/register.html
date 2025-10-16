@@ -8,32 +8,24 @@
       Cadastre as<br>informações do CEO
     </h2>
 
-    <form>
-      <div class="mb-3">
-        <label for="nome" class="form-label">Nome*</label>
-        <input type="text" class="form-control rounded-pill border-secondary-subtle" id="nome" required>
-      </div>
+    <form method="post">
+        {{ form.hidden_tag() }}
 
-      <div class="mb-3">
-        <label for="email" class="form-label">E-mail*</label>
-        <input type="email" class="form-control rounded-pill border-secondary-subtle" id="email" required>
-      </div>
+        {{ form.username.label }}
+        {{ form.username(class="form-control rounded-pill border-secondary-subtle", placeholder="Nome de usuário") }}
 
-      <div class="mb-3">
-        <label for="senha" class="form-label">Senha*</label>
-        <input type="password" class="form-control rounded-pill border-secondary-subtle" id="senha" required>
-      </div>
+        {{ form.email.label }}
+        {{ form.email(class="form-control rounded-pill border-secondary-subtle", placeholder="Email") }}
 
-      <div class="mb-3">
-        <label for="confirmar" class="form-label">Confirmar senha*</label>
-        <input type="password" class="form-control rounded-pill border-secondary-subtle" id="confirmar" required>
-      </div>
+        {{ form.password.label }}
+        {{ form.password(class="form-control rounded-pill border-secondary-subtle", placeholder="Senha") }}
 
-      <div class="text-end">
-        <button type="submit" class="btn rounded-pill px-4 text-white" style="background-color:#a7e4df;">
-          Continuar
-        </button>
-      </div>
+        {{ form.confirm_password.label }}
+        {{ form.confirm_password(class="form-control rounded-pill border-secondary-subtle", placeholder="Confirme a senha") }}
+        
+        {{ form.btnSubmit(class="btn btn-secondary w-100 rounded-pill mt-4", style="background-color:#a7e4df") }}
+
+        <div class="col-12 mt-4">Já possui cadastro? <a href="{{url_for('auth.login')}}" class="btn btn-secondary w-100 rounded-pill mt-2", style="background-color:#a7e4df">Clique aqui e faça o seu login</a></div>
     </form>
   </div>
 {% endblock %}
