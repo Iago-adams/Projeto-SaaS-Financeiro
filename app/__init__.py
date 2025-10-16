@@ -18,11 +18,23 @@ def create_app(config_class=config):
     login_manager.init_app(app)
     mail.init_app(app)
     
+
+    #Configuração do login manager
+    login_manager.login_view = 'auth.login' # Rota para usuarios não autenticados
+    login_manager.login_message_category = 'info' # Categoria da mensagem flash
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.get(int(user_id))
+    
+
     #Import das blueprints
-    from app.auth.routes import auth_bp
+    from .auth.routes import auth_bp
+    from .main.routes import main_bp
 
     #Registro das blueprints
-    app.register_blueprint(auth_bp)
+    app.register_blueprint(auth_bp, url_prefix='/auth')
+    app.register_blueprint(main_bp, url_prefix='/')
         
     
     return app

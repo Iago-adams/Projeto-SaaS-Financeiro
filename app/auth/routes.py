@@ -3,7 +3,11 @@ from app.models import User
 from .forms import LoginForm
 from flask_login import login_user, logout_user, login_required
 
-auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
+auth_bp = Blueprint(
+    'auth', 
+    __name__,  
+    template_folder='templates'
+    )
 
 #Rota de login de usuário
 @auth_bp.route('/', methods=['GET', 'POST'])
@@ -21,10 +25,11 @@ def login():
         else:
             flash('Credenciais incorretas', 'danger')
     
-    return render_template('login.html', form=form)
+    return render_template('register.html', form=form)
 
-@login_required
+
 @auth_bp.route('/logout/')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('main.homepage'))
