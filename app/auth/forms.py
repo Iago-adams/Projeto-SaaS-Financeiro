@@ -1,0 +1,31 @@
+from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, SubmitField, IntegerField
+from wtforms.validators import DataRequired, EqualTo
+
+class LoginForm(FlaskForm):
+    email = StringField('Email', validators=[DataRequired()])
+    password = PasswordField('Senha', validators=[DataRequired()])
+    btnSubmit = SubmitField('Entrar')
+
+class RegisterCompanyForm(FlaskForm):
+    name = StringField('Nome da empresa', validators=[DataRequired()])
+    cnpj = IntegerField('CNPJ', validators=[DataRequired()])
+    btnSubmit = SubmitField ('Registrar empresa')
+
+class RegisterSecretForm(FlaskForm):
+    clientId = StringField('Cliente id', validators=[DataRequired()])
+    clientSecret = StringField('Client Secret', validators=[DataRequired()])
+    btnSubmit = SubmitField ('Cadastrar credenciais')
+
+class RegisterCEOForm(FlaskForm):
+    username = StringField('Nome de usuário', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired()])
+    password = PasswordField('Senha', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirmar senha', validators=[DataRequired()])
+    btnSubmit = SubmitField('Registrar CEO')
+
+
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField('Nova senha', validators=[DataRequired()])
+    password_confirm = PasswordField('Confirmar nova senha', validators=[DataRequired(), EqualTo(password)])
+    btnSubmit = SubmitField('Redefinir')

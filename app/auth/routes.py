@@ -1,0 +1,39 @@
+from flask import Blueprint, flash, redirect, render_template, url_for
+from models import User
+from .forms import LoginForm, RegisterCompanyForm
+from flask_login import login_user, logout_user, login_required, current_user
+
+auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
+
+#Rota de login de usuário
+@auth_bp.route('/', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).scalar()
+
+        if user:
+            if user.password_check(form.password.data):
+                login_user(user)
+                flash(f'Bem vindo {user.username}', 'success')
+                return redirect(url_for('main.homepage'))
+        else:
+            flash('Credenciais incorretas', 'danger')
+    
+    return render_template('login.html', form=form)
+
+@auth_bp.route('/logout/')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('main.homepage'))
+
+
+@auth_bp.route('/register/company/')
+def register_company():
+    form = RegisterCompanyForm()
+
+    if form.validate_on_submit:
+        
+        return redirect(url_for(''))
