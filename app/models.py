@@ -1,6 +1,8 @@
 from .extensions import db
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
+from itsdangerous import URLSafeTimedSerializer
+from flask import current_app
 
 class User(db.Model, UserMixin):    
     id = db.Column(db.Integer, primary_key=True)    
@@ -14,6 +16,29 @@ class User(db.Model, UserMixin):
     
     def password_check(self, password):
         return check_password_hash(self.password_hash, password)
+    
+    def generate_token_password(self):
+        serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+
+        return serializer.dumps(self.email, salt=self.senha)
+    
+    @staticmethod
+    def verify_token(token, user_id):
+        user = User.query.get(user_id)
+
+        if user:
+
+            serializer = URLSafeTimedSerializer(current_app.config['SECRET_KEY'])
+            try:
+                token_user = serializer.loads(token, max_age=900, salt=user.senha)
+            except:
+                return None
+            
+            if token_user == user.email:
+                return user
+            
+        else:
+            return None
         
 
 class CompanyMembers(db.Model):
@@ -48,3 +73,5 @@ class Permissions(db.Model):
     name = db.Column(db.String(64), unique=True, nullable=False)
     codename = db.Column(db.String(64), unique=True, nullable=False)
 
+#precisa criar uma função before request para criar o banco de dados quando formos dar o deploy
+#encriptar ou hashear o client_id e client_secret
