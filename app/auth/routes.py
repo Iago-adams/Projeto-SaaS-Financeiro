@@ -1,7 +1,9 @@
-from flask import Blueprint, flash, redirect, render_template, url_for
-from models import User
-from .forms import LoginForm, RegisterCompanyForm
+from flask import Blueprint, flash, redirect, render_template, url_for, session
+from models import User, Company, Secrets, Role
+from .forms import LoginForm, RegisterCompanyForm, RegisterSecretForm, RegisterCEOForm
 from flask_login import login_user, logout_user, login_required, current_user
+from app import db
+from utils import create_ceo
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -29,11 +31,60 @@ def logout():
     logout_user()
     return redirect(url_for('main.homepage'))
 
-
-@auth_bp.route('/register/company/')
+@auth_bp.route('/register/company/', methods=['GET', 'POST'])
 def register_company():
     form = RegisterCompanyForm()
 
-    if form.validate_on_submit:
+    if form.validate_on_submit():
+        session['FormCompany'] = {
+            'name': form.name.data,
+            'cnpj': form.cnpj.data
+        }
         
-        return redirect(url_for(''))
+        return redirect(url_for('register_secrets'))
+
+    return render_template('register_company.html', form=form)
+    
+@auth_bp.route('/register/secrets/', methods=['GET', 'POST'])
+def register_secrets():
+    form = RegisterSecretForm()
+
+    if form.validate_on_submit():
+        session['FormSecrets'] = {
+            'clientId': form.clientId.data,
+            'clientSecret': form.clientSecret.data
+        }
+
+        return redirect(url_for('register_ceo'))
+    
+    return render_template('register_secrets.html', form=form)
+
+@auth_bp.route('/register/ceo/')
+def register_ceo():
+    form = RegisterCEOForm()
+
+    if form.validate_on_submit():
+        FormCompany = session.get('FormCompany', {})
+        company = Company(**FormCompany)
+        db.session.add(company)
+        db.session.commit()
+
+        FormSecrets = session.get('FormSecrets', {})        
+        secrets = Secrets(company_id=company.id, **FormSecrets)
+        db.session.add(secrets)
+        db.session.commit()
+
+        ceo = User(
+            username=form.username.data,
+            email=form.email.data,
+            password=form.password.data
+        )
+        db.session.add(ceo)
+        db.session.commit()
+
+        create_ceo(company.id, ceo.id)
+
+        return redirect(url_for('main.index'))
+    
+    return render_template('register_ceo.html', form=form)
+
