@@ -9,17 +9,11 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(64), unique=True, nullable=False)    
     email = db.Column(db.String(120), unique=True, nullable=False)    
     password_hash = db.Column(db.String(128), nullable=False)       
-<<<<<<< HEAD
     isSuperUser = db.Column(db.Boolean, nullable=False, default=False)
 
 
     membership = db.relationship('CompanyMembres', foreign_keys='User.id', back_populates='user')
-=======
-    isSuperUser = db.Column(db.Boolean, nullable=False)
-
-
     company = db.relationship('CompanyMembres', foreign_keys='User.id', back_populates='members')
->>>>>>> e7729cb66c56b9a29352122f71d6d80053002669
 
     #recebe a senha e hasheia ela
     def set_password(self, password):
@@ -60,23 +54,22 @@ class CompanyMembers(db.Model):
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=False)
 
-<<<<<<< HEAD
+
     # Relações de volta para as tabelas principais
     user = db.relationship('User', back_populates='memberships')
     company = db.relationship('Company', back_populates='members')
     role = db.relationship('Role', back_populates='members')
-=======
+
     #relação com user para puxar o membro (CompanyMembers)
     members = db.relationship('User', foreign_keys='User.id', back_populates='company', lazy=True)
     role = db.relationship('Role')
->>>>>>> e7729cb66c56b9a29352122f71d6d80053002669
 
 class Company(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(128), unique=True, nullable=False)
     cnpj = db.Column(db.String(20), unique=True, nullable=False)
 
-<<<<<<< HEAD
+
     # Relação: Uma empresa tem um conjunto de segredos (one-to-one).
     secrets = db.relationship('Secrets', back_populates='company', uselist=False, cascade="all, delete-orphan")
     # Relação: Uma empresa tem vários membros.
@@ -84,26 +77,23 @@ class Company(db.Model):
     # Relação: Uma empresa define várias funções (roles).
     roles = db.relationship('Role', back_populates='company', cascade="all, delete-orphan")
 
-=======
->>>>>>> e7729cb66c56b9a29352122f71d6d80053002669
+
 class Secrets(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     client_id = db.Column(db.String(128), unique=True, nullable=False)
     client_secret = db.Column(db.String(256), nullable=False)
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
 
-<<<<<<< HEAD
+
     # Relação: Segredos pertencem a uma única empresa.
     company = db.relationship('Company', back_populates='secrets')
 
-=======
->>>>>>> e7729cb66c56b9a29352122f71d6d80053002669
+
 class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True, nullable=False)
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
 
-<<<<<<< HEAD
     # Relação: A função pertence a uma empresa.
     company = db.relationship('Company', back_populates='roles')
     # Relação: Vários membros da empresa podem ter esta função.
@@ -111,30 +101,23 @@ class Role(db.Model):
     # Relação: Uma função tem várias permissões através da tabela RolePermissions.
     permissions = db.relationship('RolePermissions', back_populates='role', cascade="all, delete-orphan")
 
-=======
->>>>>>> e7729cb66c56b9a29352122f71d6d80053002669
 class RolePermissions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=False)
     permission_id = db.Column(db.Integer, db.ForeignKey('permission.id'), nullable=False)
 
-<<<<<<< HEAD
     # Relações de volta para Role e Permission
     role = db.relationship('Role', back_populates='permissions')
     permission = db.relationship('Permission', back_populates='roles')
 
-=======
->>>>>>> e7729cb66c56b9a29352122f71d6d80053002669
 class Permissions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(64), unique=True, nullable=False)
     codename = db.Column(db.String(64), unique=True, nullable=False)
 
-<<<<<<< HEAD
     # Relação: Uma permissão pode estar associada a várias funções através da tabela RolePermissions.
     roles = db.relationship('RolePermissions', back_populates='permission')
 
-=======
->>>>>>> e7729cb66c56b9a29352122f71d6d80053002669
+
 #precisa criar uma função before request para criar o banco de dados quando formos dar o deploy
 #encriptar ou hashear o client_id e client_secret
