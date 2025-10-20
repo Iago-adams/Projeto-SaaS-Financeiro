@@ -1,9 +1,16 @@
+<<<<<<< HEAD
 from flask import Blueprint, flash, redirect, render_template, url_for, session
 from models import User, Company, Secrets, Role
 from .forms import LoginForm, RegisterCompanyForm, RegisterSecretForm, RegisterCEOForm, RequestResetForm, ResetPasswordForm
 from flask_login import login_user, logout_user, login_required, current_user
 from app import db
 from utils import create_ceo
+=======
+from flask import Blueprint, flash, redirect, render_template, url_for
+from models import User
+from .forms import LoginForm
+from flask_login import login_user, logout_user, login_required, current_user
+>>>>>>> e7729cb66c56b9a29352122f71d6d80053002669
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 
@@ -31,6 +38,7 @@ def logout():
     logout_user()
     return redirect(url_for('main.homepage'))
 
+<<<<<<< HEAD
 @auth_bp.route('/register/company/', methods=['GET', 'POST'])
 def register_company():
     form = RegisterCompanyForm()
@@ -119,3 +127,8 @@ def reset_password(token, id):
             return redirect(url_for('login'))
     
     return render_template('reset_password.html', form=form)
+=======
+@auth_bp.route('/register/')
+@login_required
+def register():
+>>>>>>> e7729cb66c56b9a29352122f71d6d80053002669
