@@ -42,5 +42,21 @@ def get_token(client_id: str, client_secret: str):
         print(f'Erro ao obter o acces token: {e}')
         return None
     
-def get_extract_data():
+def get_extract_data(acess_token: str, id_conta: str):
     
+    #inserir aqui a url do endipoint da API
+    data_url = f'http://127.0.0.1:5001/contas/{id_conta}/extrato'
+    
+    headers = {
+        f'Authorization: Bearer {acess_token}'
+    }
+    
+    try:
+        response = requests.get(data_url, headers=headers)
+        response.raise_for_status()
+        
+        return response.json()
+    
+    except requests.exceptions.RequestException as e:
+        print(f"Erro ao buscar dados financeiros: {e}")
+        return None
