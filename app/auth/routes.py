@@ -59,7 +59,7 @@ def register_secrets():
     
     return render_template('register_secrets.html', form=form)
 
-@auth_bp.route('/register/ceo/')
+@auth_bp.route('/register/ceo/', methods=['GET', 'POST'])
 def register_ceo():
     form = RegisterCEOForm()
 
@@ -88,7 +88,7 @@ def register_ceo():
     
     return render_template('register_ceo.html', form=form)
 
-@auth_bp.route('/request/reset/password/')
+@auth_bp.route('/request/reset/password/', methods=['GET', 'POST'])
 def request_password():
 
     if current_user.is_authenticated:
@@ -106,7 +106,7 @@ def request_password():
 
     return render_template('request_password.html', form=form)
 
-@auth_bp.route('/reset/password/')
+@auth_bp.route('/reset/password/', methods=['GET', 'POST'])
 def reset_password(token, id):
     user = User.verify_token(token, id)
 
