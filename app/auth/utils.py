@@ -6,10 +6,17 @@ from models import Role, CompanyMembers
 def send_first_password(target):
     
     link = url_for('auth.reset_password')
+    
+    body = f'''
+        Para definir sua senha clique no link abaixo:
+        {link}
+        Caso já tenha alterado sua senha ignore este email.
+    '''
 
     msg = Message(
         subject='Credencial de acesso',
-        recipients=target.email
+        recipients=target.email,
+        body=body
     )
 
     return
