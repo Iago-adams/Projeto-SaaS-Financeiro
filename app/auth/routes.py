@@ -1,8 +1,10 @@
+from flask import Blueprint, flash, redirect, render_template, url_for, session
+from models import User, Company, Secrets, Role
+from .forms import LoginForm, RegisterCompanyForm, RegisterSecretForm, RegisterCEOForm, RequestResetForm, ResetPasswordForm
+from flask_login import login_user, logout_user, login_required, current_user
+from app import db
+from utils import create_ceo
 from flask import Blueprint, flash, redirect, render_template, url_for
-from app.models import User
-from .forms import LoginForm, RegisterForm
-from flask_login import login_user, logout_user, login_required
-from app.extensions import db
 
 auth_bp = Blueprint(
     'auth', 

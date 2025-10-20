@@ -18,6 +18,7 @@ MAIL_USERNAME = os.environ.get('MAIL_USERNAME')
 MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
 MAIL_USE_TLS = False
 MAIL_USE_SSL = True
+MAIL_DEFAULT_SENDER = os.environ.get('MAIL_USERNAME')
     
 #recebendo a chave de criptografia usada pela biblioteca cryptography
 ENCRYPTION_KEY = os.environ.get('ENCRYPTION_KEY')
