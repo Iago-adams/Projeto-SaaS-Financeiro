@@ -5,7 +5,7 @@ from flask_login import login_user, logout_user, login_required
 main_bp = Blueprint(
     'main', 
     __name__,  
-    template_folder='templates'
+    template_folder='./templates'
     )
 
 #Rota de login de usuário

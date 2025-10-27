@@ -31,10 +31,12 @@ def create_app(config_class=config):
     #Import das blueprints
     from .auth.routes import auth_bp
     from .main.routes import main_bp
+    from .dashboard.routes import dashboard_bp
 
     #Registro das blueprints
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(main_bp, url_prefix='/')
+    app.register_blueprint(dashboard_bp, url_prefix='/dashboard')
         
     
     return app
