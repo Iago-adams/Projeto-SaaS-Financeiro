@@ -1,9 +1,9 @@
 from flask import Blueprint, flash, redirect, render_template, url_for, session
-from models import User, Company, Secrets, Role
+from app.models import User, Company, Secrets, Role
 from .forms import LoginForm, RegisterCompanyForm, RegisterSecretForm, RegisterCEOForm, RequestResetForm, ResetPasswordForm
 from flask_login import login_user, logout_user, login_required, current_user
 from app import db
-from utils import create_ceo
+from .utils import create_ceo
 from flask import Blueprint, flash, redirect, render_template, url_for
 
 auth_bp = Blueprint(
@@ -30,17 +30,17 @@ def login():
     
     return render_template('login.html', form=form)
 
-
+#Rota de Logout de usuário
 @auth_bp.route('/logout/')
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('main.homepage'))
 
-
+#Rota de registro de Usuário
 @auth_bp.route('/register/', methods=['GET', 'POST'])
 def registerCEO():
-    form = RegisterForm()
+    form = RegisterCEOForm()
 
     if form.validate_on_submit():
         user = User(
@@ -60,3 +60,4 @@ def registerCEO():
             flash('Erro ao registrar usuário', 'danger')
             
     return render_template('register.html', form=form)
+
