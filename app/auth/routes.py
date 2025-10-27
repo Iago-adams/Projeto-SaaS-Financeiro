@@ -1,11 +1,11 @@
 from flask import Blueprint, flash, redirect, render_template, url_for, session
-from models import User, Company, Secrets, Role
+from app.models import User, Company, Secrets, Role
 from .forms import LoginForm, RegisterCompanyForm, RegisterSecretForm, RegisterCEOForm
 from flask_login import login_user, logout_user, login_required, current_user
 from app import db
-from utils import create_ceo
+from .utils import create_ceo
 
-auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
+auth_bp = Blueprint('auth', __name__, url_prefix='/auth', template_folder='./templates')
 
 #Rota de login de usuário
 @auth_bp.route('/', methods=['GET', 'POST'])
@@ -31,11 +31,14 @@ def logout():
     logout_user()
     return redirect(url_for('main.homepage'))
 
+
 @auth_bp.route('/register/company/', methods=['GET', 'POST'])
 def register_company():
     form = RegisterCompanyForm()
 
     if form.validate_on_submit():
+
+        #armazena os dados do forms na sessão e armazena como FormCompany
         session['FormCompany'] = {
             'name': form.name.data,
             'cnpj': form.cnpj.data
@@ -50,6 +53,8 @@ def register_secrets():
     form = RegisterSecretForm()
 
     if form.validate_on_submit():
+
+        #armazena os dados do forms na sessão e armazena como FormsSecrets
         session['FormSecrets'] = {
             'clientId': form.clientId.data,
             'clientSecret': form.clientSecret.data
@@ -59,17 +64,24 @@ def register_secrets():
     
     return render_template('register_secrets.html', form=form)
 
-@auth_bp.route('/register/ceo/')
+@auth_bp.route('/register/ceo/', methods=['GET', 'POST'])
 def register_ceo():
     form = RegisterCEOForm()
 
     if form.validate_on_submit():
+
+        #puxa os dados da sessão
         FormCompany = session.get('FormCompany', {})
+
+        #passa diretamente pro company que sera commitado no db
         company = Company(**FormCompany)
         db.session.add(company)
         db.session.commit()
 
-        FormSecrets = session.get('FormSecrets', {})        
+        #puxa os dados da sessão
+        FormSecrets = session.get('FormSecrets', {})
+
+        #passa diretamente pro secrets que sera commitado no db
         secrets = Secrets(company_id=company.id, **FormSecrets)
         db.session.add(secrets)
         db.session.commit()
@@ -82,6 +94,7 @@ def register_ceo():
         db.session.add(ceo)
         db.session.commit()
 
+        #puxa a função para já criar a role ceo na empresa
         create_ceo(company.id, ceo.id)
 
         return redirect(url_for('main.index'))

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Cadastro de Empresa{% endblock %}
+
+{% block content %}
+    <div style="max-width: 380px; width: 100%;">
+        <h2 class="fw-bold mb-4 text-secondary" style="text-shadow:1px 1px 3px rgba(0,0,0,0.2);">
+        Cadastre as<br>informações da Empresa
+        </h2>
+    
+        <form method="post">
+            {{ form.hidden_tag() }}
+    
+            {{ form.name.label }}
+            {{ form.name(class="form-control rounded-pill border-secondary-subtle", placeholder="Nome da Empresa") }}
+    
+            {{ form.cnpj.label }}
+            {{ form.cnpj(class="form-control rounded-pill border-secondary-subtle", placeholder="Endereço da Empresa") }}
+
+            {{ form.btnSubmit(class="btn btn-secondary w-100 rounded-pill mt-4", style="background-color:#a7e4df") }}
+    
+        </form>
+    </div>
+{% endblock %}

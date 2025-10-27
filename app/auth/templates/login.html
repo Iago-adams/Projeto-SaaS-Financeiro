@@ -8,7 +8,7 @@
         Login<br>
         </h2>
 
-        <form method="post" >
+        <form method="post" class="w-1000">
             {{ form.hidden_tag() }}
 
             {{ form.email.label }}
@@ -19,7 +19,7 @@
             
             {{ form.btnSubmit(class="btn btn-secondary w-100 rounded-pill mt-4", style="background-color:#a7e4df") }}
 
-            <div class="col-12 mt-4">Não possui cadastro? <a href="{{url_for('auth.registerCEO')}}" class="btn btn-secondary w-100 rounded-pill mt-2", style="background-color:#a7e4df">Clique aqui e faça o seu cadastro</a></div>
+            <div class="col-100 mt-4">Não possui cadastro? <a href="{{url_for('auth.register_ceo')}}" class="btn btn-secondary w-1 rounded-pill", style="background-color:#a7e4df">Faça o seu cadastro aqui</a></div>
         </form>
   </div>
 {% endblock %}

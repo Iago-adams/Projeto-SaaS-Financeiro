@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}Cadastro do CEO{% endblock %}
+
+{% block content %}
+  <div style="max-width: 380px; width: 100%;">
+    <h2 class="fw-bold mb-4 text-secondary" style="text-shadow:1px 1px 3px rgba(0,0,0,0.2);">
+      Cadastre as<br>informações do CEO
+    </h2>
+
+    <form method="post">
+        {{ form.hidden_tag() }}
+
+        {{ form.username.label }}
+        {{ form.username(class="form-control rounded-pill border-secondary-subtle mt-2", placeholder="Nome de usuário") }}
+
+        {{ form.email.label }}
+        {{ form.email(class="form-control rounded-pill border-secondary-subtle mt-2", placeholder="Email") }}
+
+        {{ form.password.label }}
+        {{ form.password(class="form-control rounded-pill border-secondary-subtle mt-2", placeholder="Senha") }}
+
+        {{ form.confirm_password.label }}
+        {{ form.confirm_password(class="form-control rounded-pill border-secondary-subtle mt-2", placeholder="Confirme a senha") }}
+        
+        {{ form.btnSubmit(class="btn btn-secondary w-100 rounded-pill mt-4", style="background-color:#a7e4df") }}
+
+        <div class="col-12 mt-4">Já possui cadastro? <a href="{{url_for('auth.login')}}" class="btn btn-secondary w-10 rounded-pill", style="background-color:#a7e4df">Clique aqui e faça o seu login</a></div>
+    </form>
+  </div>
+{% endblock %}
