@@ -3,6 +3,7 @@ from flask_mail import Message
 from flask import url_for
 from models import Role, CompanyMembers
 
+#função para enviar a primeira senha (gerada aleatoriamente) para o email corporativo
 def send_first_password(target):
     
     link = url_for('auth.reset_password', id=target.id)
@@ -17,6 +18,7 @@ def send_first_password(target):
 
     return
 
+#recebe o company id e user id para definir que o usuário terá a role CEO
 def create_ceo(c_id, u_id):
     ceo = Role(
         name='CEO',
