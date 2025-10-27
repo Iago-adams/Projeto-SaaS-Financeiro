@@ -2,26 +2,17 @@ from app import mail, db
 from flask_mail import Message
 from flask import url_for
 from models import Role, CompanyMembers
-from app import mail
-from flask_mail import Message
-from flask import url_for
-from models import User
 
 def send_first_password(target):
     
-    link = url_for('auth.reset_password')
-
-    
-    body = f'''
-        Para definir sua senha clique no link abaixo:
-        {link}
-        Caso já tenha alterado sua senha ignore este email.
-    '''
+    link = url_for('auth.reset_password', id=target.id)
 
     msg = Message(
         subject='Credencial de acesso',
         recipients=target.email,
-        body=body
+        body=f'''Siga o link para a redefinição de sua senha
+                {link}
+                Caso já tenha '''
     )
 
     return
@@ -42,9 +33,3 @@ def create_ceo(c_id, u_id):
 
     db.session.add(member)
     db.session.commit()
-
-    msg = Message(
-        subject='Credencial de acesso'
-    )
-
-    return

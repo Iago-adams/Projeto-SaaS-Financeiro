@@ -1,9 +1,9 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, IntegerField
-from wtforms.validators import DataRequired, EqualTo, Email
+from wtforms.validators import DataRequired, EqualTo
 
 class LoginForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    email = StringField('Email', validators=[DataRequired()])
     password = PasswordField('Senha', validators=[DataRequired()])
     btnSubmit = SubmitField('Entrar')
 
@@ -19,14 +19,11 @@ class RegisterSecretForm(FlaskForm):
 
 class RegisterCEOForm(FlaskForm):
     username = StringField('Nome de usuário', validators=[DataRequired()])
-    email = StringField('Email', validators=[DataRequired(), Email()])
+    email = StringField('Email', validators=[DataRequired()])
     password = PasswordField('Senha', validators=[DataRequired()])
     confirm_password = PasswordField('Confirmar senha', validators=[DataRequired()])
     btnSubmit = SubmitField('Registrar CEO')
 
-class RequestResetForm(FlaskForm):
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    btnSubmit = SubmitField('Solicitar')
 
 class ResetPasswordForm(FlaskForm):
     password = PasswordField('Nova senha', validators=[DataRequired()])
