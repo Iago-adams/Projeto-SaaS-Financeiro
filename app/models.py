@@ -12,8 +12,8 @@ class User(db.Model, UserMixin):
     isSuperUser = db.Column(db.Boolean, nullable=False, default=False)
 
 
-    membership = db.relationship('CompanyMembres', foreign_keys='User.id', back_populates='user')
-    company = db.relationship('CompanyMembres', foreign_keys='User.id', back_populates='members')
+    membership = db.relationship('CompanyMembers', foreign_keys='User.id', back_populates='user')
+    company = db.relationship('CompanyMembers', foreign_keys='User.id', back_populates='members')
 
     #recebe a senha e hasheia ela
     def set_password(self, password):
