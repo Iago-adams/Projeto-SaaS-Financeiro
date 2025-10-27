@@ -1,0 +1,26 @@
+<nav class="navbar navbar-expand-lg navbar-light" style="background-color:#99E6DA;">
+    <div class="container-fluid">
+        <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('main.homepage') }}">
+            <img src="{{ url_for('static', filename='img/logo.png') }}">
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item fw-bold"><a class="nav-link" style="color: white; text-shadow: 1px 1px 5px #000;" href="{{ url_for('dashboard.dashboard') }}">Dashboard</a></li>
+                <li class="nav-item fw-bold"><a class="nav-link" style="color: white; text-shadow: 1px 1px 5px #000;" href="#">Relatórios</a></li>
+                <li class="nav-item fw-bold"><a class="nav-link" style="color: white; text-shadow: 1px 1px 5px #000;" href="#">Fluxo de Caixa</a></li>
+                <li class="nav-item fw-bold"><a class="nav-link" style="color: white; text-shadow: 1px 1px 5px #000;" href="#">Colaboradores</a></li>
+                <li class="nav-item fw-bold"><a class="nav-link" style="color: white; text-shadow: 1px 1px 5px #000;" href="#">Funcionários</a></li>
+            </ul>
+            <div class="d-flex align-items-center gap-3">
+                <div class="d-flex align-items-center">
+                    <img src="{{ url_for('static', filename='avatar.png') }}" alt="avatar" width="32" height="32" class="rounded-circle me-2"/>
+                <span class="text-white fw-bold" style="text-shadow: 1px 1px 5px #000;">Nome de Usuário</span>
+                </div>
+                <a class="btn btn-danger fw-bold" style="color: F3A5A5; text-shadow: 1px 1px 5px #000;" href="{{ url_for('auth.logout') }}">Sair</a>
+            </div>
+        </div>
+    </div>
+</nav>
