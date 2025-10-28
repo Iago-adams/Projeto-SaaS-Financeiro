@@ -11,11 +11,13 @@
   {% block head %}{% endblock %}
 </head>
 
-<body class="d-flex">
-
+<body>
+  {% include 'nav.html' %}
   <!-- Conteúdo da página -->
 <div>
-    {% block content %}{% endblock %}
+    {% block content %}
+
+    {% endblock %}
 </div>
     
 

@@ -10,7 +10,6 @@ main_bp = Blueprint(
 
 #Rota de login de usuário
 @main_bp.route('/', methods=['GET', 'POST'])
-@login_required
 def homepage():
     
     return render_template('homepage.html')

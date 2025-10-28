@@ -99,7 +99,7 @@ def register_ceo():
         #puxa a função para já criar a role ceo na empresa
         create_ceo(company.id, ceo.id)
 
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.homepage'))
     
     return render_template('register_ceo.html', form=form)
 
