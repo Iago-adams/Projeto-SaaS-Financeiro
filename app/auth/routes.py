@@ -1,6 +1,6 @@
 from flask import Blueprint, flash, redirect, render_template, url_for, session
 from app.models import User, Company, Secrets, Role
-from .forms import LoginForm, RegisterCompanyForm, RegisterSecretForm, RegisterCEOForm
+from .forms import LoginForm, RegisterCompanyForm, RegisterSecretForm, RegisterCEOForm, RequestResetForm, ResetPasswordForm
 from flask_login import login_user, logout_user, login_required, current_user
 from app import db
 from .utils import create_ceo
@@ -66,6 +66,7 @@ def register_secrets():
 
 @auth_bp.route('/register/ceo/', methods=['GET', 'POST'])
 def register_ceo():
+    
     form = RegisterCEOForm()
 
     if form.validate_on_submit():
@@ -100,3 +101,36 @@ def register_ceo():
         return redirect(url_for('main.index'))
     
     return render_template('register_ceo.html', form=form)
+
+@auth_bp.route('/request/reset/password/', methods=['GET', 'POST'])
+def request_password():
+
+    if current_user.is_authenticated:
+        return redirect(url_for('main.homepage'))
+    
+    else:
+        form = RequestResetForm()
+
+        if form.validate_on_submit():
+            flash('Confira seu email para redefinir sua senha', 'warning')
+
+            user = User.query.filter_by(email=form.email.data).scalar()
+
+            return redirect(url_for('request_password'))
+
+    return render_template('request_password.html', form=form)
+
+@auth_bp.route('/reset/password/', methods=['GET', 'POST'])
+def reset_password(token, id):
+    user = User.verify_token(token, id)
+
+    if user:
+        form = ResetPasswordForm()
+
+        if form.validate_on_submit():
+            user.set_password(form.password.data)
+
+            return redirect(url_for('login'))
+    
+    return render_template('reset_password.html', form=form)
+
