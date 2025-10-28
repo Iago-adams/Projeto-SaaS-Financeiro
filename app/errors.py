@@ -14,7 +14,7 @@ def registar_erros(app):
         return render_template('errors/403.html')
     
 
-    #usar esse erro para os decorators, ex: ceo_required
+    #usar esse erro unauthorized (tipo login)
     @app.errorhandler(401)
     def unauthorized_error(error):
         return render_template('errors/401.html')

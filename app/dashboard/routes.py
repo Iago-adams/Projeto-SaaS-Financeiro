@@ -1,6 +1,7 @@
 from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_login import login_user, logout_user, login_required
 from ..services.extract_api import get_token, get_extract_data #aqui o erro q tu estourou iagozada
+from ..decorators import ceo_required #toma no cu tem q por ..
 
 dashboard_bp = Blueprint(
     'dashboard', 
