@@ -32,11 +32,13 @@ def create_app(config_class=config):
     from .auth.routes import auth_bp
     from .main.routes import main_bp
     from .dashboard.routes import dashboard_bp
+    from .ceo.routes import ceo_bp
 
     #Registro das blueprints
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(main_bp, url_prefix='/')
     app.register_blueprint(dashboard_bp, url_prefix='/dashboard')
+    app.register_blueprint(ceo_bp, url_prefix='/ceo')
         
     
     return app
