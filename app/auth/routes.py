@@ -56,6 +56,7 @@ def register_secrets():
 
         #armazena os dados do forms na sessão e armazena como FormsSecrets
         session['FormSecrets'] = {
+            'acountId': form.acountId.data,
             'clientId': form.clientId.data,
             'clientSecret': form.clientSecret.data
         }

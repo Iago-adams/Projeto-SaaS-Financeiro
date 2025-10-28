@@ -80,8 +80,9 @@ class Company(db.Model):
 
 class Secrets(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    client_id = db.Column(db.String(128), unique=True, nullable=False)
-    client_secret = db.Column(db.String(256), nullable=False)
+    acount_id = db.Column(db.String(128), unique=True, nullable=False) #não precisa de criptografia
+    client_id = db.Column(db.String(128), unique=True, nullable=False) #encryptado
+    client_secret = db.Column(db.String(256), nullable=False) #encryptado
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
 
 
