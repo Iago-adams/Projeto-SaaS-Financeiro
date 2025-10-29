@@ -49,7 +49,7 @@ def register_company():
             'cnpj': form.cnpj.data
         }
         
-        return redirect(url_for('register_secrets'))
+        return redirect(url_for('auth.register_secrets'))
 
     return render_template('register_company.html', form=form)
     
@@ -66,7 +66,7 @@ def register_secrets():
             'clientSecret': form.clientSecret.data
         }
 
-        return redirect(url_for('register_ceo'))
+        return redirect(url_for('auth.register_ceo'))
     
     return render_template('register_secrets.html', form=form)
 
@@ -122,7 +122,7 @@ def request_password():
 
             user = User.query.filter_by(email=form.email.data).scalar()
 
-            return redirect(url_for('request_password'))
+            return redirect(url_for('auth.request_password'))
 
     return render_template('request_password.html', form=form)
 
@@ -136,6 +136,6 @@ def reset_password(token, id):
         if form.validate_on_submit():
             user.set_password(form.password.data)
 
-            return redirect(url_for('login'))
+            return redirect(url_for('auth.login'))
     
     return render_template('reset_password.html', form=form)
