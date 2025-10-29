@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block title %}Acesso negado (403){% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column justify-content-center align-items-center vh-100">
+    <h1 class="display-1 fw-bold text-secondary">403</h1>
+    <h2 class="mb-4 text-secondary">Acesso negado</h2>
+    <p class="mb-4 text-secondary">Você não tem permissão para acessar esta página.</p>
+    <a href="{{ url_for('main.homepage') }}" class="btn btn-secondary rounded-pill" style="background-color:#99E6DA">
+        Voltar para a página inicial
+    </a>
+</div>
+{% endblock %}

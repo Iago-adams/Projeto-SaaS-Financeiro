@@ -5,7 +5,12 @@ from flask_login import login_user, logout_user, login_required, current_user
 from app import db
 from .utils import create_ceo
 
-auth_bp = Blueprint('auth', __name__, url_prefix='/auth', template_folder='./templates')
+auth_bp = Blueprint(
+    'auth', 
+    __name__, 
+    url_prefix='/auth', 
+    template_folder='./templates'
+)
 
 #Rota de login de usuário
 @auth_bp.route('/', methods=['GET', 'POST'])
@@ -134,4 +139,3 @@ def reset_password(token, id):
             return redirect(url_for('login'))
     
     return render_template('reset_password.html', form=form)
-
