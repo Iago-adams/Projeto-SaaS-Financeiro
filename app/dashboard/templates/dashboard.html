@@ -3,5 +3,12 @@
 {% block title %}Dashboard{% endblock %}
 
 {% block content %}
+    <div>
+        <h1>Dashboard do Cliente</h1>
 
+        <h2>Fluxo de Transações</h2>
+        <div>
+            {{ graph_extract_line | safe }}
+        </div>
+    </div>
 {% endblock %}
