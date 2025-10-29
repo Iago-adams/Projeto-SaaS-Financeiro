@@ -2,6 +2,7 @@ from flask import Blueprint, flash, redirect, render_template, url_for
 from flask_login import login_user, logout_user, login_required
 from ..services.extract_api import get_token, get_extract_data
 from ..decorators import ceo_required
+import pandas as pd
 
 dashboard_bp = Blueprint(
     'dashboard', 
@@ -21,4 +22,5 @@ def dashboard():
     #usando a função que requere os dados em JSON da API, futuramente adicinar uma tabela no banco de dados para salvar o JSON em multi-tenant, para não requisitar todas as vezes
     acount_id = 'conta-tenant-01'
     data = get_extract_data(acess_token=token, acount_id=acount_id)
+    
     return render_template('dashboard.html')
