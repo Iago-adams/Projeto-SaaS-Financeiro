@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Página nâo encontrada (404){% endblock %}
+
+{% block content %}
+<div class="d-flex flex-column justify-content-center align-items-center vh-100">
+    <h1 class="display-1 fw-bold text-secondary">404</h1>
+    <h2 class="mb-4 text-secondary">Página não encontrada</h2>
+    <p class="mb-4 text-secondary">Desculpe, a página que você está procurando não existe.</p>
+    <a href="{{ url_for('main.homepage') }}" class="btn btn-secondary rounded-pill" style="background-color:#99E6DA">Voltar para a página inicial</a>
+</div>
+{% endblock %}

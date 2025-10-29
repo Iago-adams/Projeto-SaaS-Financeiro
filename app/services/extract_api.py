@@ -28,7 +28,7 @@ def get_token(client_id: str, client_secret: str):
         #pega o json retorando pelo endpoint
         response_data = response.json()
         
-        #busca pelo access token no json retornado pelo endpointq
+        #busca pelo access token no json retornado pelo endpoint
         access_token = response_data.get('access_token')
         
         if not access_token:
@@ -42,13 +42,13 @@ def get_token(client_id: str, client_secret: str):
         print(f'Erro ao obter o acces token: {e}')
         return None
     
-def get_extract_data(acess_token: str, id_conta: str):
+def get_extract_data(acess_token: str, acount_id: str):
     
     #inserir aqui a url do endipoint da API
-    data_url = f'http://127.0.0.1:5001/contas/{id_conta}/extrato'
+    data_url = f'http://127.0.0.1:5001/contas/{acount_id}/extrato'
     
     headers = {
-        f'Authorization: Bearer {acess_token}'
+        'Authorization': f'Bearer {acess_token}'
     }
     
     try:
