@@ -35,6 +35,8 @@ def dashboard():
     exctract_data_normalized['completedAt'] = pd.to_datetime(exctract_data_normalized['completedAt'])
     exctract_data_normalized = exctract_data_normalized.sort_values(by=['completedAt'])
     
+    #configuração do gráfico linear
+    
     fig_extract_data_line = px.line(
         exctract_data_normalized,
         x='completedAt',
@@ -89,7 +91,7 @@ def dashboard():
         )
     )
 
-    # Conversão para HTML (seu código original está correto)
+    # Conversão para HTML
     graph_extract_data_line_html = pio.to_html(fig_extract_data_line, full_html=False, include_plotlyjs='cdn')
 
     return render_template('dashboard.html', graph_extract_line=graph_extract_data_line_html)
