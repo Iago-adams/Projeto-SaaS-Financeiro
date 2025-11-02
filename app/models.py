@@ -12,8 +12,7 @@ class User(db.Model, UserMixin):
     isSuperUser = db.Column(db.Boolean, nullable=False, default=False)
 
 
-    membership = db.relationship('CompanyMembers', foreign_keys='User.id', back_populates='user')
-    company = db.relationship('CompanyMembers', foreign_keys='User.id', back_populates='members')
+    membership = db.relationship('CompanyMembers', foreign_keys='CompanyMembers.user_id', back_populates='user')
 
     #recebe a senha e hasheia ela
     def set_password(self, password):
@@ -56,13 +55,10 @@ class CompanyMembers(db.Model):
 
 
     # Relações de volta para as tabelas principais
-    user = db.relationship('User', back_populates='memberships')
+    user = db.relationship('User', back_populates='membership')
     company = db.relationship('Company', back_populates='members')
     role = db.relationship('Role', back_populates='members')
 
-    #relação com user para puxar o membro (CompanyMembers)
-    members = db.relationship('User', foreign_keys='User.id', back_populates='company', lazy=True)
-    role = db.relationship('Role')
 
 class Company(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -100,16 +96,16 @@ class Role(db.Model):
     # Relação: Vários membros da empresa podem ter esta função.
     members = db.relationship('CompanyMembers', back_populates='role')
     # Relação: Uma função tem várias permissões através da tabela RolePermissions.
-    permissions = db.relationship('RolePermissions', back_populates='role', cascade="all, delete-orphan")
+    permissions = db.relationship('RolePermissions', foreign_keys='RolePermissions.role_id',back_populates='role', cascade="all, delete-orphan")
 
 class RolePermissions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     role_id = db.Column(db.Integer, db.ForeignKey('role.id'), nullable=False)
-    permission_id = db.Column(db.Integer, db.ForeignKey('permission.id'), nullable=False)
+    permission_id = db.Column(db.Integer, db.ForeignKey('permissions.id'), nullable=False)
 
     # Relações de volta para Role e Permission
-    role = db.relationship('Role', back_populates='permissions')
-    permission = db.relationship('Permission', back_populates='roles')
+    role = db.relationship('Role', foreign_keys=role_id, back_populates='permissions')
+    permission = db.relationship('Permissions', foreign_keys=permission_id, back_populates='roles')
 
 class Permissions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -117,8 +113,7 @@ class Permissions(db.Model):
     codename = db.Column(db.String(64), unique=True, nullable=False)
 
     # Relação: Uma permissão pode estar associada a várias funções através da tabela RolePermissions.
-    roles = db.relationship('RolePermissions', back_populates='permission')
+    roles = db.relationship('RolePermissions', foreign_keys='RolePermissions.permission_id', back_populates='permission')
 
 
-#precisa criar uma função before request para criar o banco de dados quando formos dar o deploy
 #encriptar ou hashear o client_id e client_secret

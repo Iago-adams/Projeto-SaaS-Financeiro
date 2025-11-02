@@ -2,9 +2,29 @@
 from flask import Flask
 from . import config
 from .extensions import db, migrate, login_manager, mail
-from .models import User
+from .models import User, Permissions
 #só pra explicar o ponto ajuda o flask a saber que o arquivos estão nesta mesma pasta o que ajuda na velocidade
 #explicação tecnica pro ponto é que ele manda o flask procurar no mesmo pacote basicamente
+
+def create_permissions():
+    perms = {'CEO':'Acesso as configuração da empresa',
+             'dash':'Acesso aos dashboards', } #caso necessário só aumentar a key e o codename o value o name
+
+    for perm in perms: #ele vai entrar e pegar as keys do dict e vai adicionar no db
+        verify = Permissions.query.filter_by(codename=perm).first()
+
+        if verify is None:
+            permission = Permissions(
+                name=perms[perm],
+                codename=perm
+            )
+
+            db.session.add(permission)
+            db.session.commit()
+            print(f'{perm} foi criada')
+        else:
+            print(f'{perm} já está criada')
+        
 
 def create_app(config_class=config):
 

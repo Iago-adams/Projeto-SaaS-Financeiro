@@ -1,7 +1,8 @@
 from app import mail, db
 from flask_mail import Message
 from flask import url_for
-from app.models import Role, CompanyMembers
+from app.models import Role, CompanyMembers, Permissions
+import random, string
 
 #função para enviar a primeira senha (gerada aleatoriamente) para o email corporativo
 def send_first_password(target):
@@ -22,11 +23,15 @@ def send_first_password(target):
 def create_ceo(c_id, u_id):
     ceo = Role(
         name='CEO',
-        company_id=id
+        company_id=c_id
     )
+
+    for perms in Permissions.query.all():
+        ceo.permissions.apend(perms)
+    
     db.session.add(ceo)
     db.session.commit()
-    
+
     member = CompanyMembers(
         user_id=u_id,
         company_id = c_id,
@@ -35,3 +40,6 @@ def create_ceo(c_id, u_id):
 
     db.session.add(member)
     db.session.commit()
+
+def generate_password():
+    ''.join(random.choices(string.ascii_uppercase + string.digits, k=6))

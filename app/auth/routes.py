@@ -61,9 +61,9 @@ def register_secrets():
 
         #armazena os dados do forms na sessão e armazena como FormsSecrets
         session['FormSecrets'] = {
-            'acountId': form.acountId.data,
-            'clientId': form.clientId.data,
-            'clientSecret': form.clientSecret.data
+            'acount_id': form.acountId.data,
+            'client_id': form.clientId.data,
+            'client_secret': form.clientSecret.data
         }
 
         return redirect(url_for('auth.register_ceo'))
@@ -96,8 +96,8 @@ def register_ceo():
         ceo = User(
             username=form.username.data,
             email=form.email.data,
-            password=form.password.data
         )
+        ceo.set_password(form.password.data)
         db.session.add(ceo)
         db.session.commit()
 

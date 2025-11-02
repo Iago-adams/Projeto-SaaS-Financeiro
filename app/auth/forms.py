@@ -14,8 +14,8 @@ class RegisterCompanyForm(FlaskForm):
 
 class RegisterSecretForm(FlaskForm):
     acountId = StringField('Identificador da conta', validators=[DataRequired()])
-    clientId = StringField('Cliente id', validators=[DataRequired()])
-    clientSecret = StringField('Client Secret', validators=[DataRequired()])
+    clientId = PasswordField('Cliente id', validators=[DataRequired()])
+    clientSecret = PasswordField('Client Secret', validators=[DataRequired()])
     btnSubmit = SubmitField ('Cadastrar credenciais')
 
 class RegisterCEOForm(FlaskForm):
