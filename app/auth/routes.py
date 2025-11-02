@@ -49,7 +49,7 @@ def register_company():
             'cnpj': form.cnpj.data
         }
         
-        return redirect(url_for('register_secrets'))
+        return redirect(url_for('auth.register_secrets'))
 
     return render_template('register_company.html', form=form)
     
@@ -61,12 +61,12 @@ def register_secrets():
 
         #armazena os dados do forms na sessão e armazena como FormsSecrets
         session['FormSecrets'] = {
-            'acountId': form.acountId.data,
-            'clientId': form.clientId.data,
-            'clientSecret': form.clientSecret.data
+            'acount_id': form.acountId.data,
+            'client_id': form.clientId.data,
+            'client_secret': form.clientSecret.data
         }
 
-        return redirect(url_for('register_ceo'))
+        return redirect(url_for('auth.register_ceo'))
     
     return render_template('register_secrets.html', form=form)
 
@@ -96,8 +96,8 @@ def register_ceo():
         ceo = User(
             username=form.username.data,
             email=form.email.data,
-            password=form.password.data
         )
+        ceo.set_password(form.password.data)
         db.session.add(ceo)
         db.session.commit()
 
@@ -122,7 +122,7 @@ def request_password():
 
             user = User.query.filter_by(email=form.email.data).scalar()
 
-            return redirect(url_for('request_password'))
+            return redirect(url_for('auth.request_password'))
 
     return render_template('request_password.html', form=form)
 
@@ -136,6 +136,6 @@ def reset_password(token, id):
         if form.validate_on_submit():
             user.set_password(form.password.data)
 
-            return redirect(url_for('login'))
+            return redirect(url_for('auth.login'))
     
     return render_template('reset_password.html', form=form)
