@@ -12,7 +12,7 @@ class User(db.Model, UserMixin):
     isSuperUser = db.Column(db.Boolean, nullable=False, default=False)
 
 
-    membership = db.relationship('CompanyMembers', foreign_keys='CompanyMembers.user_id', back_populates='user')
+    membership = db.relationship('CompanyMembers', foreign_keys='CompanyMembers.user_id', back_populates='user', uselist=False)
 
     #recebe a senha e hasheia ela
     def set_password(self, password):
@@ -55,7 +55,7 @@ class CompanyMembers(db.Model):
 
 
     # Relações de volta para as tabelas principais
-    user = db.relationship('User', back_populates='membership')
+    user = db.relationship('User', back_populates='membership', uselist=False)
     company = db.relationship('Company', back_populates='members')
     role = db.relationship('Role', back_populates='members')
 
