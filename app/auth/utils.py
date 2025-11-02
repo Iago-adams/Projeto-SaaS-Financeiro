@@ -27,11 +27,11 @@ def create_ceo(c_id, u_id):
     )
 
     for perms in Permissions.query.all():
-        ceo.permissions = perms
+        ceo.permissions.apend(perms)
     
     db.session.add(ceo)
     db.session.commit()
-    
+
     member = CompanyMembers(
         user_id=u_id,
         company_id = c_id,
