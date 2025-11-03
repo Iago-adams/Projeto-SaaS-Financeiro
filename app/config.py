@@ -6,9 +6,22 @@ from dotenv import load_dotenv
 load_dotenv()
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
+
+# Configuração do Banco de Dados PostgreSQL
+DB_USER = os.getenv('DB_USER')
+DB_PASSWORD = os.getenv('DB_PASSWORD')
+DB_HOST = os.getenv('DB_HOST')
+DB_PORT = os.getenv('DB_PORT')
+DB_NAME = os.getenv('DB_NAME')
+
+# URI de Conexão do SQLAlchemy
+# Formato: postgresql://[user]:[password]@[host]:[port]/[dbname]
+SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL') or (
+    f"postgresql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@"
+    f"{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
+)
     
-#Configuração para o banco de dados
-SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+# Opcional, mas recomendado: desativa o rastreamento de modificações
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 #Configurações Flask_Mail
