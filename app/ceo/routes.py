@@ -4,7 +4,7 @@ from app.models import User, Role, Permissions, CompanyMembers
 from flask_login import current_user
 from ..decorators import ceo_required
 from .forms import RoleForm, MemberForm
-from auth.utils import send_first_password, generate_password
+from ..auth.utils import send_first_password, generate_password
 
 ceo_bp = Blueprint('ceo', __name__, template_folder='./templates')
 
