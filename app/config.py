@@ -36,3 +36,7 @@ ENCRYPTION_KEY = os.environ.get('ENCRYPTION_KEY')
 #esse if verifica que a chave de cryptografia foi definida no .env para garantir a segurança e funcionamento do sistema
 if os.environ.get('FLASK_ENV') == 'production' and not ENCRYPTION_KEY:
     raise ValueError("ENCRYPTION_KEY não definida nas variáveis de ambiente.")
+
+#definição dos valores de hash para o argon2
+ARGON2_TIME_COST = 4
+ARGON2_MEMORY_COST = 65536
