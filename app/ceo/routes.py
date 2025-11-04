@@ -26,7 +26,9 @@ def add_member():
             username=form.username.data,
             email=form.email.data,
         )
-        user.set_password(generate_password())
+
+        password = generate_password()
+        user.set_password(password)
 
         member = CompanyMembers(
             company_id=current_user.membership.company_id,
@@ -36,6 +38,8 @@ def add_member():
         db.session.add(user)
         db.session.add(member)
         db.session.commit()
+
+        send_first_password(user, password)
 
         flash(f'{form.username.data} foi adicionado ao sistema', 'success')
 

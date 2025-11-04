@@ -96,7 +96,7 @@ class Role(db.Model):
     # Relação: Vários membros da empresa podem ter esta função.
     members = db.relationship('CompanyMembers', back_populates='role')
     # Relação: Uma função tem várias permissões através da tabela RolePermissions.
-    permissions = db.relationship('RolePermissions', foreign_keys='RolePermissions.role_id',back_populates='role', cascade="all, delete-orphan")
+    permissions = db.relationship('RolePermissions', foreign_keys='RolePermissions.role_id', back_populates='role', cascade="all, delete-orphan")
 
 class RolePermissions(db.Model):
     id = db.Column(db.Integer, primary_key=True)
