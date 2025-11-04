@@ -11,7 +11,7 @@ ceo_bp = Blueprint('ceo', __name__, template_folder='./templates')
 #rota básica do ceo, deve listar todos os membros
 @ceo_bp.route('/')
 def ceo_page():
-    members = User.query.filter_by(User.company.id==current_user.company.id)
+    members = CompanyMembers.query.filter(CompanyMembers.company_id == current_user.membership.company_id).all()
 
     return render_template('ceo.html', members=members)
 
