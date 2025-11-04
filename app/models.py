@@ -3,6 +3,7 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeTimedSerializer
 from flask import current_app
+from .services.hashing import hash_password, verify_password
 
 class User(db.Model, UserMixin):    
     id = db.Column(db.Integer, primary_key=True)    
@@ -46,6 +47,14 @@ class User(db.Model, UserMixin):
             
         else:
             return None
+        
+    def set_password(self, password):
+        #Define o hash da senha
+        self.password_hash = hash_password(password)
+
+    def check_password(self, password): 
+        #verifica a senha com o hash
+        return verify_password(password, self.password_hash)
 
 class CompanyMembers(db.Model):
     id = db.Column(db.Integer, primary_key=True)

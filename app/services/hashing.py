@@ -1,6 +1,12 @@
-from argon2 import PasswordHasher
-from argon2.exceptions import VerifyMismatchError
-import sys
+from passlib.context import CryptContext
 
-#apenas declarando, vai ser iniciado no init
-ph = None
+pwd_context = CryptContext(
+    schemes=["argon2"],
+    deprecated="auto"
+)
+
+def hash_password(password):
+    return pwd_context.hash(password)
+
+def verify_password(plain_password, hashed_password):
+    return pwd_context.verify(plain_password, hashed_password)
