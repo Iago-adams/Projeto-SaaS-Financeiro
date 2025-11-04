@@ -4,5 +4,3 @@ import sys
 
 #apenas declarando, vai ser iniciado no init
 ph = None
-
-def 
