@@ -3,12 +3,13 @@ from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeTimedSerializer
 from flask import current_app
+from .services.hashing import hash_password, verify_password
 
 class User(db.Model, UserMixin):    
     id = db.Column(db.Integer, primary_key=True)    
     username = db.Column(db.String(64), unique=True, nullable=False)    
     email = db.Column(db.String(120), unique=True, nullable=False)    
-    password_hash = db.Column(db.String(128), nullable=False)       
+    password_hash = db.Column(db.String(255), nullable=False)       
     isSuperUser = db.Column(db.Boolean, nullable=False, default=False)
 
 
@@ -46,6 +47,14 @@ class User(db.Model, UserMixin):
             
         else:
             return None
+        
+    def set_password(self, password):
+        #Define o hash da senha
+        self.password_hash = hash_password(password)
+
+    def check_password(self, password): 
+        #verifica a senha com o hash
+        return verify_password(password, self.password_hash)
 
 class CompanyMembers(db.Model):
     id = db.Column(db.Integer, primary_key=True)
