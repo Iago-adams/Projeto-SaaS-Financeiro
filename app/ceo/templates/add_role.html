@@ -1,0 +1,29 @@
+{% extends 'base_ceo.html' %}
+{%block content%}
+
+<div class="table">
+    <form method="post">
+        {{ form.csrf_token }}
+
+        <div class="mb-3">
+            {{ form.name.label(class="form-label") }}
+            {{ form.name(class="form-control") }}
+        </div>
+
+        <div class="mb-3">
+            {{ form.permissions.label(class="form-label d-block") }}
+
+            {% for subfield in form.permissions %}
+                <div class="form-check">
+                    {{ subfield(class="form-check-input") }}
+                    {{ subfield.label(class="form-check-label") }}
+                </div>
+            {% endfor %}
+        </div>
+
+        {{ form.btnSubmit(class="btn btn-success mt-3") }}
+    </form>
+</div>
+
+
+{%endblock%}

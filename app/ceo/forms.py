@@ -1,11 +1,17 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField, SelectField, SubmitField, SelectMultipleField
+from wtforms import StringField, SelectField, SubmitField, SelectMultipleField, widgets
 from wtforms.validators import DataRequired, Email
+
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
+    
 
 class RoleForm(FlaskForm):
     name = StringField('Nome da função', validators=[DataRequired()])
-    permissions = SelectMultipleField('Permissões da função', choices=[], coerce=int, validators=[DataRequired()])
+    permissions = MultiCheckboxField('Permissões da função', coerce=int, validators=[DataRequired()])
     btnSubmit = SubmitField('Criar')
+
 
 class MemberForm(FlaskForm):
     username = StringField('Nome de usuário', validators=[DataRequired()])
