@@ -1,5 +1,4 @@
-from flask import Blueprint, flash, redirect, render_template, url_for
-from flask_login import login_user, logout_user, login_required
+from flask import Blueprint, render_template, jsonify
 
 
 main_bp = Blueprint(
@@ -13,3 +12,9 @@ main_bp = Blueprint(
 def homepage():
     
     return render_template('homepage.html')
+
+
+#Health chech testa se o projeto está rodando corretamente
+@main_bp.route('/health', methods=['GET', 'POST'])
+def health_check():
+    return jsonify({"status": "online"}), 200
