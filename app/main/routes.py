@@ -13,6 +13,8 @@ def homepage():
     
     return render_template('homepage.html')
 
+
+#Health chech testa se o projeto está rodando corretamente
 @main_bp.route('/health', methods=['GET', 'POST'])
 def health_check():
     return jsonify({"status": "online"}), 200
