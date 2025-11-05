@@ -1,6 +1,5 @@
 from .extensions import db
 from flask_login import UserMixin
-from werkzeug.security import generate_password_hash, check_password_hash
 from itsdangerous import URLSafeTimedSerializer
 from flask import current_app
 from .services.hashing import hash_password, verify_password
@@ -17,11 +16,13 @@ class User(db.Model, UserMixin):
 
     #recebe a senha e hasheia ela
     def set_password(self, password):
-        self.password_hash = generate_password_hash(password)
+        #Define o hash da senha
+        self.password_hash = hash_password(password)
     
     #função para verificação de senha (login)
-    def password_check(self, password):
-        return check_password_hash(self.password_hash, password)
+    def password_check(self, password): 
+        #verifica a senha com o hash
+        return verify_password(password, self.password_hash)
     
     #cria um token para a redefinição de senha
     def generate_token_password(self):
@@ -47,14 +48,6 @@ class User(db.Model, UserMixin):
             
         else:
             return None
-        
-    def set_password(self, password):
-        #Define o hash da senha
-        self.password_hash = hash_password(password)
-
-    def check_password(self, password): 
-        #verifica a senha com o hash
-        return verify_password(password, self.password_hash)
 
 class CompanyMembers(db.Model):
     id = db.Column(db.Integer, primary_key=True)
