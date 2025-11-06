@@ -3,7 +3,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.io as pio
 
-def _normalize_JSON_transactions(JSON):
+def normalize_JSON_transactions(JSON):
     #Normalizando o JSON(necessário pois o JSON está aninhado)
     JSON_normalized = pd.json_normalize(
         JSON,
@@ -16,9 +16,30 @@ def _normalize_JSON_transactions(JSON):
     
     return JSON_normalized
 
-def generate_lineGraph_extract(extract_API_data):
-    #Normalizar os dados
-    exctract_data_normalized = _normalize_JSON_transactions(extract_API_data)
+def calculate_kpis_from_dataframe(df):
+    """
+    Recebe o DataFrame normalizado e calcula os KPIs.
+    RETORNA UM DICIONÁRIO (JSON).
+    """
+    if df.empty:
+        return {
+            "total_revenue": 0,
+            "total_expenses": 0,
+            "current_balance": 0
+        }
+
+    # Assumindo que valores > 0 são receita, < 0 são despesa
+    total_revenue = round(df[df['amount'] > 0]['amount'].sum(), 2)
+    total_expenses = round(df[df['amount'] < 0]['amount'].sum(), 2) # Já é negativo
+    current_balance = round(df['amount'].sum(), 2)
+    
+    return {
+        "total_revenue": total_revenue,
+        "total_expenses": total_expenses,
+        "current_balance": current_balance
+    }
+
+def generate_lineGraph_extract(exctract_data_normalized):
     
     #configuração do gráfico linear
     fig_extract_data_line = px.line(
