@@ -9,3 +9,7 @@ env/
 
 instance/
 *.db
+
+migrations/
+
+report/

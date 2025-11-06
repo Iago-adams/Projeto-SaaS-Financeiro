@@ -1,7 +1,7 @@
 from app import mail, db
 from flask_mail import Message
 from flask import url_for
-from app.models import Role, CompanyMembers, Permissions
+from app.models import Role, CompanyMembers, Permissions, RolePermissions
 import random, string
 from werkzeug.security import generate_password_hash
 
@@ -20,14 +20,15 @@ def reset_password(target):
 
     mail.send(msg)
 
-def send_first_password(target):
+def send_first_password(target, password):
 
     link = url_for('auth.reset_password', id=target.id)
 
     msg = Message(
         subject='Credencial de acesso',
         recipients=target.email,
-        body=f'''Você está com a senha temporária, para sua segurança redefina sua senha. 
+        body=f'''Você está com a senha temporária: {password}.
+                Para sua segurança redefina sua senha. 
                 Siga o link abaixo para a redefinição de senha
                 {link}'''
     )
@@ -41,8 +42,13 @@ def create_ceo(c_id, u_id):
         company_id=c_id
     )
 
-    for perms in Permissions.query.all():
-        ceo.permissions.apend(perms)
+    perms = Permissions.query.all()
+
+    for perm in perms:
+        role_perm = RolePermissions(
+            permission=perm
+        )
+        ceo.permissions.append(role_perm)
     
     db.session.add(ceo)
     db.session.commit()
