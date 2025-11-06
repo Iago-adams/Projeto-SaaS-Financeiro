@@ -3,7 +3,7 @@ from app.models import User, Company, Secrets, Role
 from .forms import LoginForm, RegisterCompanyForm, RegisterSecretForm, RegisterCEOForm, RequestResetForm, ResetPasswordForm
 from flask_login import login_user, logout_user, login_required, current_user
 from app import db
-from .utils import create_ceo
+from .utils import create_ceo, validate_password_policy
 
 auth_bp = Blueprint(
     'auth', 
@@ -82,6 +82,12 @@ def register_ceo():
 
         #passa diretamente pro company que sera commitado no db
         company = Company(**FormCompany)
+        #verifica se a empresa ja esta cadastrada
+        verify_company = Company.query.filter_by(cnpj=company.cnpj).first()
+        if verify_company:
+            flash('CNPJ já cadastrado no sistema.', 'danger')
+            return render_template('register_ceo.html', form=form)
+        #cadastra a empresa
         db.session.add(company)
         db.session.commit()
 
@@ -90,13 +96,42 @@ def register_ceo():
 
         #passa diretamente pro secrets que sera commitado no db
         secrets = Secrets(company_id=company.id, **FormSecrets)
+        #verifica se os secrets ja estao cadastrados
+        verify_account_id = Secrets.query.filter_by(acount_id=secrets.acount_id).first()
+        verify_client_id = Secrets.query.filter_by(client_id=secrets.client_id).first()
+        if verify_account_id:
+            flash('Key já cadastrado no sistema.', 'danger')
+            return render_template('register_ceo.html', form=form)
+        if verify_client_id:
+            flash('Secret já cadastrado no sistema.', 'danger')
+            return render_template('register_ceo.html', form=form)
+        #adiciona o secrets ao db
         db.session.add(secrets)
         db.session.commit()
-
+        
+        #Verifica se o username e email já estão cadastrados
+        verify_username = User.query.filter_by(username=form.username).first()
+        if verify_username:
+            flash('Nome já cadastrado no sistema.', 'danger')
+            return render_template('register_ceo.html', form=form)
+        verify_email = User.query.filter_by(email=form.email).first()
+        if verify_email:
+            flash('Nome já cadastrado no sistema.', 'danger')
+            return render_template('register_ceo.html', form=form)
+        
+        #Cria o usuário CEO
         ceo = User(
             username=form.username.data,
             email=form.email.data,
         )
+
+        #Checando segurança da senha
+        password=form.password.data
+        is_valid, error_message = validate_password_policy(password)
+        if not is_valid:
+            flash(error_message, 'danger')
+            return render_template('register_ceo.html', form=form)
+
         ceo.set_password(form.password.data)
         db.session.add(ceo)
         db.session.commit()
