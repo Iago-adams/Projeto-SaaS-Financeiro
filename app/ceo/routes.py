@@ -43,6 +43,8 @@ def add_member():
             role_id=form.role.data
         )
 
+        user.membership = member
+
         db.session.add(user)
         db.session.add(member)
         db.session.commit()
@@ -63,7 +65,7 @@ def edit_member(id):
 def delete_member(id):
     pass
 
-@ceo_bp.route('/adicionar/funcao/')
+@ceo_bp.route('/adicionar/funcao/', methods=['GET', 'POST'])
 def add_role():
     form = RoleForm()
 
@@ -76,7 +78,7 @@ def add_role():
         )
 
         for perm in form.permissions.data:
-            role.permissions = perm
+            role.permissions.permissions_id = perm
         
         db.session.add(role)
         db.session.commit()

@@ -1,7 +1,7 @@
 {% extends 'base_ceo.html' %}
 {%block content%}
 
-<div class="table">
+<div class="table container-fluid">
     <form method="post">
         {{ form.csrf_token }}
 
@@ -11,12 +11,12 @@
         </div>
 
         <div class="mb-3">
-            {{ form.permissions.label(class="form-label d-block") }}
+            {{ form.permissions.label(class="form-label") }}
 
             {% for subfield in form.permissions %}
-                <div class="form-check">
-                    {{ subfield(class="form-check-input") }}
-                    {{ subfield.label(class="form-check-label") }}
+                <div class="form-check">    
+                    {{ subfield(class="btn btnchekck")}}
+                    {{subfield.label(class="form-label")}}
                 </div>
             {% endfor %}
         </div>

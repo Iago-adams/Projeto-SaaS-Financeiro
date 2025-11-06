@@ -12,7 +12,7 @@ def reset_password(target):
 
     msg = Message(
         subject='Credencial de acesso',
-        recipients=target.email,
+        recipients=[target.email],
         body=f'''Siga o link para a redefinição de sua senha
                 {link}
                 Caso não tenha solicitado ignore esse email.'''
@@ -26,7 +26,7 @@ def send_first_password(target, password):
 
     msg = Message(
         subject='Credencial de acesso',
-        recipients=target.email,
+        recipients=[target.email],
         body=f'''Você está com a senha temporária: {password}.
                 Para sua segurança redefina sua senha. 
                 Siga o link abaixo para a redefinição de senha
