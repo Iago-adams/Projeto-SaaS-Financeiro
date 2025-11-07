@@ -124,6 +124,8 @@ def request_password():
 
             user = User.query.filter_by(email=form.email.data).scalar()
 
+            user.generate_token_password()
+
             return redirect(url_for('auth.request_password'))
 
     return render_template('request_password.html', form=form)
