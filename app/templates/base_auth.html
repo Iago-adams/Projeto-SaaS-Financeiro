@@ -9,6 +9,75 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   
   {% block head %}{% endblock %}
+  <style>
+    /* Estilos base (você já deve ter) */
+.alert {
+    padding: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: .25rem;
+}
+.alert-danger {
+    color: #721c24;
+    background-color: #f8d7da;
+    border-color: #f5c6cb;
+}
+.alert-success {
+    color: #155724;
+    background-color: #d4edda;
+    border-color: #c3e6cb;
+}
+/* Fim dos estilos base */
+
+
+/* 1. Definição da Animação (O que ela faz) */
+@keyframes fadeOutAndCollapse {
+    /* Início: O alerta está visível */
+    0% {
+        opacity: 1;
+        visibility: visible;
+        /* Definimos uma altura máxima para poder animar o "colapso" */
+        max-height: 150px; 
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    /* Meio: O alerta começa a desaparecer (fade out) */
+    80% {
+        opacity: 0;
+        visibility: hidden;
+        max-height: 150px;
+        padding: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    /* Fim: O alerta colapsa (altura e margens zeradas) */
+    100% {
+        opacity: 0;
+        visibility: hidden;
+        max-height: 0;
+        padding: 0 1rem; /* Zera padding vertical */
+        margin-bottom: 0;
+    }
+}
+
+/* 2. Aplicação da Animação no Alerta */
+.flash-auto-dismiss {
+    /* Essencial para a animação de 'max-height' funcionar suavemente */
+    overflow: hidden;
+
+    /* Sintaxe curta da animação: */
+    animation: fadeOutAndCollapse 1.5s ease-in-out 5s forwards;
+
+    /* Detalhado:
+       animation-name: fadeOutAndCollapse;
+       animation-duration: 1.5s;  (Duração do efeito de sumiço)
+       animation-timing-function: ease-in-out;
+       animation-delay: 5s;       (Espera 5 segundos ANTES de começar)
+       animation-fill-mode: forwards; (Mantém o estado final, 100% da animação)
+    */
+}
+  </style>
 </head>
 
 <body class="d-flex">
@@ -31,6 +100,17 @@
 
   <!-- Conteúdo da página -->
   <div class="d-flex flex-column justify-content-center align-items-center bg-white w-50">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-messages">
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} flash-auto-dismiss" role="alert">
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
     {% block content %}{% endblock %}
   </div>
 

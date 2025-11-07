@@ -86,10 +86,8 @@ def register_ceo():
         verify_company = Company.query.filter_by(cnpj=company.cnpj).first()
         if verify_company:
             flash('CNPJ já cadastrado no sistema.', 'danger')
-            return render_template('register_ceo.html', form=form)
+            return redirect(url_for('auth.register_company'))
         #cadastra a empresa
-        db.session.add(company)
-        db.session.commit()
 
         #puxa os dados da sessão
         FormSecrets = session.get('FormSecrets', {})
@@ -100,24 +98,22 @@ def register_ceo():
         verify_account_id = Secrets.query.filter_by(acount_id=secrets.acount_id).first()
         verify_client_id = Secrets.query.filter_by(client_id=secrets.client_id).first()
         if verify_account_id:
-            flash('Key já cadastrado no sistema.', 'danger')
-            return render_template('register_ceo.html', form=form)
+            flash('Ocorreu um erro inesperado.', 'danger')
+            return redirect(url_for('auth.register_company'))
         if verify_client_id:
-            flash('Secret já cadastrado no sistema.', 'danger')
+            flash('Ocorreu um erro inesperado.', 'danger')
             return render_template('register_ceo.html', form=form)
         #adiciona o secrets ao db
-        db.session.add(secrets)
-        db.session.commit()
         
         #Verifica se o username e email já estão cadastrados
-        verify_username = User.query.filter_by(username=form.username).first()
+        verify_username = User.query.filter_by(username=form.username.data).first()
         if verify_username:
             flash('Nome já cadastrado no sistema.', 'danger')
-            return render_template('register_ceo.html', form=form)
-        verify_email = User.query.filter_by(email=form.email).first()
+            return redirect(url_for('auth.register_ceo'))
+        verify_email = User.query.filter_by(email=form.email.data).first()
         if verify_email:
             flash('Nome já cadastrado no sistema.', 'danger')
-            return render_template('register_ceo.html', form=form)
+            return redirect(url_for('auth.register_ceo'))
         
         #Cria o usuário CEO
         ceo = User(
@@ -130,10 +126,12 @@ def register_ceo():
         is_valid, error_message = validate_password_policy(password)
         if not is_valid:
             flash(error_message, 'danger')
-            return render_template('register_ceo.html', form=form)
+            return redirect(url_for('auth.register_ceo'))
 
         ceo.set_password(form.password.data)
         db.session.add(ceo)
+        db.session.add(company)
+        db.session.add(secrets)
         db.session.commit()
 
         #puxa a função para já criar a role ceo na empresa
