@@ -22,7 +22,7 @@ class RegisterCEOForm(FlaskForm):
     username = StringField('Nome de usuário', validators=[DataRequired()])
     email = StringField('Email', validators=[DataRequired()])
     password = PasswordField('Senha', validators=[DataRequired()])
-    confirm_password = PasswordField('Confirmar senha', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirmar senha', validators=[DataRequired(), EqualTo(password)])
     btnSubmit = SubmitField('Registrar CEO')
 
 class RequestResetForm(FlaskForm):

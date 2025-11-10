@@ -17,7 +17,13 @@ def ceo_page():
     if pesquisa:
         members = User.query.filter_by(username=pesquisa)
 
-    members = User.query.filter(User.membership.company_id==current_user.membership.company_id)
+    members = CompanyMembers.query.filter(CompanyMembers.company_id==current_user.membership.company_id)
+
+    user = User.query.get(2)
+    password = "KU6BBW"
+
+    send_first_password(user, password)
+    print('deu certo')
 
     return render_template('ceo.html', members=members)
 

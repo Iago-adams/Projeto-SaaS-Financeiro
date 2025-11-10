@@ -130,16 +130,18 @@ def request_password():
 
     return render_template('request_password.html', form=form)
 
-@auth_bp.route('/reset/password/', methods=['GET', 'POST'])
+@auth_bp.route('/reset/password/<id>/<token>/', methods=['GET', 'POST'])
 def reset_password(token, id):
     user = User.verify_token(token, id)
 
-    if user:
-        form = ResetPasswordForm()
+    if not user:
+        flash('Token expirado', 'danger')
+        return redirect(url_for('auth.login'))
+    
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        user.set_password(form.password.data)
 
-        if form.validate_on_submit():
-            user.set_password(form.password.data)
-
-            return redirect(url_for('auth.login'))
+        return redirect(url_for('auth.login'))
     
     return render_template('reset_password.html', form=form)
