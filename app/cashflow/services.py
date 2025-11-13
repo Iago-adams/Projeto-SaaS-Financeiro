@@ -22,3 +22,6 @@ def get_cashflow_kpis_json():
     kpis = calculate_kpis_from_dataframe(normalized_df)
     
     return kpis
+
+def send_cashflow_pdf():
+    return None

@@ -14,6 +14,10 @@ def cashflow():
     graph_extract_line_html = generate_extract_graph()
     return render_template('cashflow.html', graph_extract_line=graph_extract_line_html)
 
+@cashflow_bp.route('/send-report')
+def send_report():
+    return render_template('cashflow_bp')
+
 #Rota para o teste com o FK
 @cashflow_bp.route('/kpis', methods=['GET'])
 def cashflow_kpis():
