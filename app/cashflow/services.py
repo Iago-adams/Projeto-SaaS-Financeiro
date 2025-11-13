@@ -13,7 +13,7 @@ def generate_extract_graph():
     lineGraph_extract_html = generate_lineGraph_extract(normalized_JSON)
     return lineGraph_extract_html
 
-def get_dashboard_kpis_json():
+def get_cashflow_kpis_json():
     #função que vai servir para retornar o kpis para um endpoint que vai ser acessado pelo RF, para testar o sistema
     extract_API_data = get_financial_JSON()
     normalized_df = normalize_JSON_transactions(extract_API_data)

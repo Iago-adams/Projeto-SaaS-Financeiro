@@ -8,7 +8,7 @@ from .models import User, Permissions
 
 def create_permissions():
     perms = {'CEO':'Acesso as configuração da empresa',
-             'dash':'Acesso aos dashboards', } #caso necessário só aumentar a key e o codename o value o name
+             'cashflow':'Acesso ao fluxo de caixa', } #caso necessário só aumentar a key e o codename o value o name
 
     for perm in perms: #ele vai entrar e pegar as keys do dict e vai adicionar no db
         verify = Permissions.query.filter_by(codename=perm).first()
@@ -51,14 +51,14 @@ def create_app(config_class=config):
     #Import das blueprints
     from .auth.routes import auth_bp
     from .main.routes import main_bp
-    from .dashboard.routes import dashboard_bp
+    from .cashflow.routes import cashflow_bp
     from .ceo.routes import ceo_bp
     from .errors.errors import errors_bp
 
     #Registro das blueprints
     app.register_blueprint(auth_bp, url_prefix='/auth')
     app.register_blueprint(main_bp, url_prefix='/')
-    app.register_blueprint(dashboard_bp, url_prefix='/dashboard')
+    app.register_blueprint(cashflow_bp, url_prefix='/cashflow')
     app.register_blueprint(ceo_bp, url_prefix='/ceo')
     app.register_blueprint(errors_bp, url_prefix='/error')
         
