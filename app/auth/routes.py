@@ -20,13 +20,20 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).scalar()
 
+
         if user:
+            
             if user.password_check(form.password.data):
                 login_user(user)
                 flash(f'Bem vindo {user.username}', 'success')
                 return redirect(url_for('main.homepage'))
+            
+            else:
+                flash('Credenciais incorretas', 'danger')
+
         else:
             flash('Credenciais incorretas', 'danger')
+
     
     return render_template('login.html', form=form)
 
@@ -140,6 +147,7 @@ def reset_password(token, id):
     
     form = ResetPasswordForm()
     if form.validate_on_submit():
+        print(form.password.data)
         user.set_password(form.password.data)
 
         return redirect(url_for('auth.login'))

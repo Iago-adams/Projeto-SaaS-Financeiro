@@ -19,12 +19,6 @@ def ceo_page():
 
     members = CompanyMembers.query.filter(CompanyMembers.company_id==current_user.membership.company_id)
 
-    user = User.query.get(2)
-    password = "KU6BBW"
-
-    send_first_password(user, password)
-    print('deu certo')
-
     return render_template('ceo.html', members=members)
 
 @ceo_bp.route('/adicionar/colaborador/', methods=['GET', 'POST'])
@@ -69,7 +63,10 @@ def edit_member(id):
 
 @ceo_bp.route('/deletar/<int:id>/colaborador/')
 def delete_member(id):
-    pass
+    user = User.query.get(id)
+
+    if user:
+        db.session.delete(user)
 
 @ceo_bp.route('/adicionar/funcao/', methods=['GET', 'POST'])
 def add_role():
