@@ -2,8 +2,7 @@ from flask import Blueprint, render_template, flash, redirect, url_for, request
 from app import db
 from app.models import User, Role, Permissions, CompanyMembers
 from flask_login import current_user
-from ..decorators import ceo_required
-from .forms import RoleForm, MemberForm
+from .forms import RoleForm, MemberForm, EditMemberForm
 from ..auth.utils import send_first_password, generate_password
 
 ceo_bp = Blueprint('ceo', __name__, template_folder='./templates')
@@ -57,11 +56,16 @@ def add_member():
     
     return render_template('add_member.html', form=form)
 
-@ceo_bp.route('/editar/<int:id>/colaborador/')
+@ceo_bp.route('/editar/<int:id>/colaborador/', methods=['GET', 'POST'])
 def edit_member(id):
-    pass
+    user = User.query.get_or_404(id)
+    form = EditMemberForm()
 
-@ceo_bp.route('/deletar/<int:id>/colaborador/')
+    if form.validate_on_submit():
+        form.populate_obj()
+
+
+@ceo_bp.route('/deletar/<int:id>/colaborador/', methods=['POST'])
 def delete_member(id):
     user = User.query.get(id)
 
