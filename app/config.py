@@ -5,7 +5,6 @@ from dotenv import load_dotenv
 
 load_dotenv(encoding='utf-8')
 
-print(f"DEBUG: DB_USER lido do .env = {os.getenv('DB_USER')}")
 
 SECRET_KEY = os.environ.get('SECRET_KEY')
 

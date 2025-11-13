@@ -1,5 +1,5 @@
 *** Settings ***
-Documentation     Testa o endpoint de KPIs do Dashboard
+[Documentation]     Testa o endpoint de KPIs do Dashboard
 Library           RequestsLibrary
 Library           Collections
 
