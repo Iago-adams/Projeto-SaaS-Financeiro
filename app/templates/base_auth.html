@@ -101,16 +101,14 @@
   <!-- Conteúdo da página -->
   <div class="d-flex flex-column justify-content-center align-items-center bg-white w-50">
     {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-      <div class="flash-messages">
+      {% if messages %}
+        <ul class=flashes>
         {% for category, message in messages %}
-          <div class="alert alert-{{ category }} flash-auto-dismiss" role="alert">
-            {{ message }}
-          </div>
+          <li class="{{ category }}">{{ message }}</li>
         {% endfor %}
-      </div>
-    {% endif %}
-  {% endwith %}
+        </ul>
+      {% endif %}
+    {% endwith %}
     {% block content %}{% endblock %}
   </div>
 

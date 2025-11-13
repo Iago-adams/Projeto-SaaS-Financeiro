@@ -10,11 +10,11 @@ from typing import Tuple
 #função para enviar a primeira senha (gerada aleatoriamente) para o email corporativo
 def reset_password(target):
     
-    link = url_for('auth.reset_password', id=target.id)
+    link = url_for('auth.reset_password', id=target.id, token=target.generate_token_password(), _external=True)
 
     msg = Message(
         subject='Credencial de acesso',
-        recipients=target.email,
+        recipients=[target.email],
         body=f'''Siga o link para a redefinição de sua senha
                 {link}
                 Caso não tenha solicitado ignore esse email.'''
@@ -23,12 +23,11 @@ def reset_password(target):
     mail.send(msg)
 
 def send_first_password(target, password):
-
-    link = url_for('auth.reset_password', id=target.id)
+    link = url_for('auth.reset_password', id=target.id, token=target.generate_token_password(), _external=True)
 
     msg = Message(
         subject='Credencial de acesso',
-        recipients=target.email,
+        recipients=[target.email],
         body=f'''Você está com a senha temporária: {password}.
                 Para sua segurança redefina sua senha. 
                 Siga o link abaixo para a redefinição de senha

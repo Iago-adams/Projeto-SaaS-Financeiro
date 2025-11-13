@@ -1,0 +1,24 @@
+{% extends 'base_ceo.html' %}
+{%block content%}
+
+    <div class="table container-fluid">
+        <form method="post">
+
+            {{form.csrf_token()}}
+
+            {{form.username.label()}}
+            {{form.username(class="form-control")}}
+
+            {{form.email.label()}}
+            {{form.email(class="form-control")}}
+
+            {{form.role.label()}}
+            {{form.role(class="form-control")}}
+
+            {{form.btnSubmit(class="btn btn-success")}}
+            <a href="{{ url_for('ceo.add_role') }}" class="btn btn-info">Adicionar função</a>
+            
+        </form>
+    </div>
+
+{%endblock%}

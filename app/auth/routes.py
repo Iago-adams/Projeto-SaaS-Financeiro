@@ -20,13 +20,20 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).scalar()
 
+
         if user:
+            
             if user.password_check(form.password.data):
                 login_user(user)
                 flash(f'Bem vindo {user.username}', 'success')
                 return redirect(url_for('main.homepage'))
+            
+            else:
+                flash('Credenciais incorretas', 'danger')
+
         else:
             flash('Credenciais incorretas', 'danger')
+
     
     return render_template('login.html', form=form)
 
@@ -137,6 +144,8 @@ def register_ceo():
         #puxa a função para já criar a role ceo na empresa
         create_ceo(company.id, ceo.id)
 
+        login_user(ceo)
+
         return redirect(url_for('main.homepage'))
     
     return render_template('register_ceo.html', form=form)
@@ -155,20 +164,25 @@ def request_password():
 
             user = User.query.filter_by(email=form.email.data).scalar()
 
+            user.generate_token_password()
+
             return redirect(url_for('auth.request_password'))
 
     return render_template('request_password.html', form=form)
 
-@auth_bp.route('/reset/password/', methods=['GET', 'POST'])
+@auth_bp.route('/reset/password/<id>/<token>/', methods=['GET', 'POST'])
 def reset_password(token, id):
     user = User.verify_token(token, id)
 
-    if user:
-        form = ResetPasswordForm()
+    if not user:
+        flash('Token expirado', 'danger')
+        return redirect(url_for('auth.login'))
+    
+    form = ResetPasswordForm()
+    if form.validate_on_submit():
+        print(form.password.data)
+        user.set_password(form.password.data)
 
-        if form.validate_on_submit():
-            user.set_password(form.password.data)
-
-            return redirect(url_for('auth.login'))
+        return redirect(url_for('auth.login'))
     
     return render_template('reset_password.html', form=form)

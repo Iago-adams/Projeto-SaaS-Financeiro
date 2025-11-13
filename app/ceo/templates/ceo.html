@@ -1,0 +1,27 @@
+{% extends 'base_ceo.html' %}
+{%block content%}
+
+    <div class="table">
+        <table>
+            <thead>
+                <tr>
+                    <th>Nome do usuário</th>
+                    <th>Email</th>
+                    <th>Função</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for member in members %}
+                    <tr>
+                        <td>{{member.user.username}}</td>
+                        <td>{{member.user.email}}</td>
+                        <td>{{member.role.name}}</td>
+                        <td><a href="{{ url_for('ceo.edit_member', id=member.user_id)}}" class="btn">Detalhes</a></td>
+                    </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+    </div>
+
+{%endblock%}
