@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, jsonify
 #from ..decorators import permission_required
-from .services import generate_extract_graph, get_cashflow_kpis_json
+from .services import generate_extract_graph, get_cashflow_kpis_json, send_cashflow_pdf
 
 cashflow_bp = Blueprint(
     'cashflow', 
@@ -16,6 +16,7 @@ def cashflow():
 
 @cashflow_bp.route('/send-report')
 def send_report():
+    send_cashflow_pdf()#retorna a função para enviar o pdf com extrato bancário do service
     return render_template('cashflow_bp')
 
 #Rota para o teste com o FK

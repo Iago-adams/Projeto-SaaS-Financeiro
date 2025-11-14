@@ -24,4 +24,5 @@ def get_cashflow_kpis_json():
     return kpis
 
 def send_cashflow_pdf():
+    #busca no banco de dados todos os funcionarios com role cashflow, e chamar a task para gerar e enviar o pdf em segundo plano
     return None
