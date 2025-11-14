@@ -61,6 +61,8 @@ def edit_member(id):
     user = User.query.get_or_404(id)
     form = EditMemberForm()
 
+    form.role.choices = [Role.query.all()]
+
     if form.validate_on_submit():
         form.populate_obj()
 
