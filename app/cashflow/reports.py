@@ -1,1 +1,2 @@
-#Para gerar o PDF
+def generate_cashflow_PDF():
+    return None

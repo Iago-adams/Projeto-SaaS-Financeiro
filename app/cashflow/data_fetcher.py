@@ -4,7 +4,7 @@ from ..services.extract_api import get_token, get_extract_data
 def _get_decrypted_client_keys(acount_id):
     return None
 
-def get_financial_JSON():#Para a aplicação prática precisa passar o acount_id
+def get_financial_JSON(acount_id):#Para a aplicação prática precisa passar o acount_id
     #pegar a client id e a client secret descriptografadas
     #client_keys = _get_decrypted_client_keys(acount_id)
     

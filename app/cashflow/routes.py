@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, jsonify
 #from ..decorators import permission_required
 from .services import generate_extract_graph, get_cashflow_kpis_json, send_cashflow_pdf
+from flask_login import login_required, current_user
 
 cashflow_bp = Blueprint(
     'cashflow', 
@@ -11,12 +12,17 @@ cashflow_bp = Blueprint(
 #Rota de login de usuário
 @cashflow_bp.route('/', methods=['GET', 'POST'])
 def cashflow():
-    graph_extract_line_html = generate_extract_graph()
+    tenant_id = current_user.membership.company_id
+    
+    graph_extract_line_html = generate_extract_graph(acount_id = tenant_id)
     return render_template('cashflow.html', graph_extract_line=graph_extract_line_html)
 
 @cashflow_bp.route('/send-report')
 def send_report():
-    send_cashflow_pdf()#retorna a função para enviar o pdf com extrato bancário do service
+    tenant_id = current_user.membership.company_id
+    tenant_name = current_user.membership.company.name
+    
+    send_cashflow_pdf(acount_id = tenant_id, comapany_name = tenant_name)#retorna a função para enviar o pdf com extrato bancário do service
     return render_template('cashflow_bp')
 
 #Rota para o teste com o FK
