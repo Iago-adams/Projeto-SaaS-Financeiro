@@ -14,10 +14,26 @@
 <body>
   {% include 'nav.html' %}
   <!-- Conteúdo da página -->
+<div style="position: fixed; top: 20px; left: 85%; transform: translateX(-50%); z-index: 1050; width: 90%; max-width: 400px;">
+    
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+            {% for category, message in messages %}
+              
+              <div class="alert alert-{{ category }} d-flex align-items-center justify-content-between fade show rounded-pill shadow-sm mb-2" role="alert">
+                <div>
+                    {{ message }}
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+              
+            {% endfor %}
+      {% endif %}
+    {% endwith %}
+    
+</div>
 <div>
-    {% block content %}
-
-    {% endblock %}
+  {% block content %}{% endblock %}
 </div>
     
 

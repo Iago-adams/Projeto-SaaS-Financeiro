@@ -80,57 +80,29 @@
     */
 }
 
-/* css para o ícone de mostrar/ocultar senha */
-
-/* Contêiner principal para posicionamento relativo */
+/* Container para o input e o ícone */
 .password-container {
+    /* Isso permite posicionar o ícone 'absolutamente' dentro deste container */
     position: relative;
-    width: 100%; /* Ajuste conforme necessário */
 }
 
-/* Ajusta o input para dar espaço ao ícone */
-.password-container input {
-    width: 100%;
-    /* Adiciona padding à direita para o ícone não sobrepor o texto */
-    padding-right: 40px; 
-    box-sizing: border-box; /* Garante que o padding não altere a largura total */
-}
-
-/* Posicionamento absoluto do ícone dentro do contêiner */
-.password-container #toggleSenha {
+/* Estilo do ícone de olho */
+#togglePassword {
+    /* Posiciona o ícone de forma absoluta */
     position: absolute;
-    right: 15px; /* Distância da borda direita */
-    top: 50%;
+    
+    /* Coloca o ícone no lado direito */
+    right: 15px; 
+    
+    /* Alinha verticalmente no meio */
+    top: 70%;
     transform: translateY(-50%);
+    
+    /* Muda o cursor para indicar que é clicável */
     cursor: pointer;
-    color: #777; /* Cor do ícone */
-}
-
-/* Ajuste de posicionamento caso o label esteja acima do input (como no exemplo) */
-/* Se o label e o input estiverem lado a lado, o 'top: 50%' funciona bem. */
-/* Se o label estiver acima, talvez seja necessário ajustar o 'top' para ficar
-   dentro do <input> e não do <div> */
-
-/* Exemplo se o label estiver acima: */
-.password-container #toggleSenha {
-    position: absolute;
-    right: 15px;
-    /* Posição vertical alinhada com o input (ex: se o input tiver 40px de altura) */
-    top: 40px; /* Ajuste este valor conforme a altura do seu input + label */ 
-    transform: translateY(-50%);
-    cursor: pointer;
-    color: #777;
-}
-
-/* Ajuste fino (Recomendado): Posicione o 'top' relativo ao input, não ao div.
-   Se o label estiver acima, o input começa depois. */
-.password-container #toggleSenha {
-    position: absolute;
-    right: 15px;
-    /* Assumindo que o input é o último elemento visual antes do ícone */
-    bottom: 12px; /* Ajuste fino para alinhar verticalmente com o input */
-    cursor: pointer;
-    color: #777;
+    
+    /* Um cor sutil para o ícone */
+    color: #6c757d; /* (cinza do bootstrap 'secondary') */
 }
   </style>
 </head>
@@ -154,19 +126,32 @@
   </div>
 
   <!-- Conteúdo da página -->
-  <div class="d-flex flex-column justify-content-center align-items-center bg-white w-50">
+  <div style="position: fixed; top: 20px; left: 85%; transform: translateX(-50%); z-index: 1050; width: 90%; max-width: 400px;">
+    
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
-        <ul class=flashes>
-        {% for category, message in messages %}
-          <li class="{{ category }}">{{ message }}</li>
-        {% endfor %}
-        </ul>
+            {% for category, message in messages %}
+              
+              <div class="alert alert-{{ category }} d-flex align-items-center justify-content-between fade show rounded-pill shadow-sm mb-2" role="alert">
+                <div>
+                    {{ message }}
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+              
+            {% endfor %}
       {% endif %}
     {% endwith %}
+    
+</div>
+  <div class="d-flex flex-column justify-content-center align-items-center bg-white w-50">
     {% block content %}{% endblock %}
   </div>
-
+  
+  {% block scripts %}
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="{{ url_for('static', filename='js/passwordViewToggle.js') }}"></script>
+  {% endblock %}
+  
 </body>
 </html>

@@ -1,19 +1,18 @@
-// static/js/passwordToggle.js
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener("DOMContentLoaded", function () {
 
-    // ATENÇÃO AQUI: IDs atualizados
-    const toggleBotao = document.getElementById('togglePassword');
-    const inputSenha = document.getElementById('password'); // WTForms gera 'password'
+    const toggleIcon = document.querySelector("#togglePassword");
+    const passwordInput = document.querySelector("#password");
 
-    if (toggleBotao && inputSenha) {
-        toggleBotao.addEventListener('click', function() {
-            // Verifica o tipo atual do input
-            const type = inputSenha.getAttribute('type') === 'password' ? 'text' : 'password';
-            inputSenha.setAttribute('type', type);
+    if (toggleIcon && passwordInput) {
+        toggleIcon.addEventListener("click", function (e) {
+            // Previne comportamentos padrões estranhos
+            e.preventDefault(); 
 
-            // Alterna o ícone (olho aberto vs. olho fechado)
-            this.classList.toggle('fa-eye');
-            this.classList.toggle('fa-eye-slash');
+            const type = passwordInput.getAttribute("type") === "password" ? "text" : "password";
+            passwordInput.setAttribute("type", type);
+            
+            this.classList.toggle("fa-eye");
+            this.classList.toggle("fa-eye-slash");
         });
     }
 });

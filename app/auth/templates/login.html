@@ -3,32 +3,33 @@
 {% block title %}Login{% endblock %}
     
 {% block content %}
-    <div style="max-width: 380px; width: 100%;">
-        <h2 class="fw-bold mb-4 text-secondary" style="text-shadow:1px 1px 3px rgba(0,0,0,0.2);">
+<div style="max-width: 380px; width: 100%;">
+    <h2 class="fw-bold mb-4 text-secondary" style="text-shadow:1px 1px 3px rgba(0,0,0,0.2);">
         Login<br>
-        </h2>
+    </h2>
 
-        <form method="post" class="w-1000">
-            {{ form.hidden_tag() }}
+    <form method="post" class="w-1000">
+        {{ form.hidden_tag() }}
 
-            {{ form.email.label }}
-            {{ form.email(class="form-control rounded-pill border-secondary-subtle", placeholder="Email") }}
+        {{ form.email.label }}
+        {{ form.email(class="form-control rounded-pill border-secondary-subtle", placeholder="Email") }}
 
-            <div class="password-container">
-                {{ form.password.label }}
-                
-                {{ form.password(class="form-control rounded-pill border-secondary-subtle", placeholder="Senha") }}
-                
-                <i class="fa-solid fa-eye" id="togglePassword"></i>
-            </div>
+        <div class="password-container mt-3"> 
+            {{ form.password.label }}
             
-            {{ form.btnSubmit(class="btn btn-secondary w-100 rounded-pill mt-4", style="background-color:#a7e4df") }}
+            {{ form.password(
+                class="form-control rounded-pill border-secondary-subtle", 
+                placeholder="Senha", 
+                id="password") 
+            }}
+            
+            <i class="fa-solid fa-eye " id="togglePassword"></i>
+        </div>
+        
+        {{ form.btnSubmit(class="btn btn-secondary w-100 rounded-pill mt-4", style="background-color:#a7e4df") }}
 
-            <div class="col-100 mt-4">Não possui cadastro? <a href="{{url_for('auth.register_company')}}" class="btn btn-secondary w-1 rounded-pill", style="background-color:#a7e4df">Faça o seu cadastro aqui</a></div>
-        </form>
+        <div class="col-100 mt-4">Não possui cadastro? <a href="{{url_for('auth.register_company')}}" class="btn btn-secondary w-1 rounded-pill", style="background-color:#a7e4df">Faça o seu cadastro aqui</a></div>
+    </form>
 
-  </div>
-{% endblock %}
-{% block scripts %}
-<script src="{{ url_for('static', filename='js/passwordToggle.js') }}"></script> 
+
 {% endblock %}
