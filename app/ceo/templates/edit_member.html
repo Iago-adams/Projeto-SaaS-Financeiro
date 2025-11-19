@@ -1,0 +1,39 @@
+{% extends 'base_ceo.html' %}
+{%block content%}
+
+    <div class="container">
+        <form method="post">
+            {{form.csrf_token}}
+
+            {{form.username.label()}}
+            {{form.username(value=user.username)}}
+
+            {{form.email.label()}}
+            {{form.email(value=user.email)}}
+
+            {{form.role.label()}}
+            {{form.role()}}
+            
+            {{ form.permissions.label(class="form-label") }}
+
+            {% for subfield in form.permissions %}
+                <div class="form-check">
+                    {# Verifica se o valor do campo está na lista de permissões do usuário #}
+                    {{ subfield(class="checkbox", checked=(subfield.data in user.membership.role.permissions)) }}
+                    
+                    {{ subfield.label(class="form-label") }}
+                </div>
+            {% endfor %}
+
+            {{form.btnSubmit(class="btn btn-success")}}
+
+        </form>
+
+        <form action="{{url_for('ceo.delete_member', id=user.id)}}" method="post" onsubmit="return confirm('Confirmar execução?')">
+            {{form.csrf_token}}
+            <button type="submit" class="btn btn-danger">Excluir</button>
+        </form>
+
+    </div>
+
+{%endblock%}

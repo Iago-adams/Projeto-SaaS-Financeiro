@@ -20,3 +20,11 @@ class MemberForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
     role = SelectField('Função', choices=[], coerce=int, validators=[DataRequired()])
     btnSubmit = SubmitField('Cadastrar')
+
+
+class EditMemberForm(FlaskForm):
+    username = StringField('Nome de usuário', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    role = SelectField('Função', choices=[], coerce=int, validators=[DataRequired()])
+    permissions = CheckBoxField('Permissões da função', coerce=int, choices=[], validators=[Length(min=1, message="Selecione ao menos um campo de permissão")])
+    btnSubmit = SubmitField('Salvar')
