@@ -92,7 +92,7 @@ def register_ceo():
         #verifica se a empresa ja esta cadastrada
         verify_company = Company.query.filter_by(cnpj=company.cnpj).first()
         if verify_company:
-            flash('CNPJ já cadastrado no sistema.', 'danger')
+            flash('Credenciais inválidas.', 'danger')
             return redirect(url_for('auth.register_company'))
         #cadastra a empresa
 
@@ -115,12 +115,12 @@ def register_ceo():
         #Verifica se o username e email já estão cadastrados
         verify_username = User.query.filter_by(username=form.username.data).first()
         if verify_username:
-            flash('Nome já cadastrado no sistema.', 'danger')
-            return redirect(url_for('auth.register_ceo'))
+            flash('Nome de usuário já cadastrado no sistema.', 'danger')
+
         verify_email = User.query.filter_by(email=form.email.data).first()
         if verify_email:
-            flash('Nome já cadastrado no sistema.', 'danger')
-            return redirect(url_for('auth.register_ceo'))
+            flash('Email já cadastrado no sistema.', 'danger')
+
         
         #Cria o usuário CEO
         ceo = User(
