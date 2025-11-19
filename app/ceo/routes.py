@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, flash, redirect, url_for, request
+from flask import Blueprint, render_template, flash, redirect, url_for, request, abort
 from app import db
 from app.models import User, Role, Permissions, CompanyMembers
 from flask_login import current_user
@@ -61,10 +61,20 @@ def edit_member(id):
     user = User.query.get_or_404(id)
     form = EditMemberForm()
 
-    form.role.choices = [Role.query.all()]
+    form.role.choices = [(r.id, r.name) for r in Role.query.all()]
+    form.permissions.choices = [(p.id, p.name) for p in Permissions.query.all()]
+
+    form.username.default = user.username
 
     if form.validate_on_submit():
-        form.populate_obj()
+        user.username = form.username.data
+        user.email = form.email.data
+        user.membership.role = form.role.data
+        user.membership.role.permissions = form.permissions.data
+
+        return redirect(url_for('ceo.ceo_page'))
+    
+    return render_template('edit_member.html', form=form, user=user)
 
 
 @ceo_bp.route('/deletar/<int:id>/colaborador/', methods=['POST'])
@@ -72,7 +82,16 @@ def delete_member(id):
     user = User.query.get(id)
 
     if user:
+        nome = user.username
         db.session.delete(user)
+        db.session.commit()
+
+        flash(f'{nome} foi removido do sistema', 'warning')
+
+        return redirect(url_for('ceo.ceo_page'))
+    
+    return abort(404)
+
 
 @ceo_bp.route('/adicionar/funcao/', methods=['GET', 'POST'])
 def add_role():
