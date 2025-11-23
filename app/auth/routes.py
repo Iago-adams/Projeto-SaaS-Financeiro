@@ -94,13 +94,16 @@ def register_ceo():
         if verify_company:
             flash('Credenciais inválidas.', 'danger')
             return redirect(url_for('auth.register_company'))
-        #cadastra a empresa
+        
+        db.session.add(company)
+        db.session.commit()
 
         #puxa os dados da sessão
         FormSecrets = session.get('FormSecrets', {})
 
         #passa diretamente pro secrets que sera commitado no db
-        secrets = Secrets(company_id=company.id, **FormSecrets)
+        secrets = Secrets(**FormSecrets)
+        secrets.company_id = company.id
         #verifica se os secrets ja estao cadastrados
         verify_account_id = Secrets.query.filter_by(acount_id=secrets.acount_id).first()
         verify_client_id = Secrets.query.filter_by(client_id=secrets.client_id).first()
@@ -110,7 +113,7 @@ def register_ceo():
         if verify_client_id:
             flash('Ocorreu um erro inesperado.', 'danger')
             return render_template('register_ceo.html', form=form)
-        #adiciona o secrets ao db
+        
         
         #Verifica se o username e email já estão cadastrados
         verify_username = User.query.filter_by(username=form.username.data).first()
@@ -136,9 +139,8 @@ def register_ceo():
             return redirect(url_for('auth.register_ceo'))
 
         ceo.set_password(form.password.data)
-        db.session.add(ceo)
-        db.session.add(company)
         db.session.add(secrets)
+        db.session.add(ceo)
         db.session.commit()
 
         #puxa a função para já criar a role ceo na empresa

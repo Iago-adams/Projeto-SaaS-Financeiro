@@ -110,7 +110,7 @@ def validate_password_complexity(password: str) -> Tuple[bool, str]:
     Valida a senha contra os requisitos mínimos de complexidade.
     """
     
-    MIN_LENGTH = 12
+    MIN_LENGTH = 8
     if len(password) < MIN_LENGTH:
         return False, f"A senha deve ter no mínimo {MIN_LENGTH} caracteres."
 

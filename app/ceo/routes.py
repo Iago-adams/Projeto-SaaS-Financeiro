@@ -13,10 +13,10 @@ def ceo_page():
 
     pesquisa = request.args.get('pesquisa', '')
 
-    if pesquisa:
-        members = User.query.filter_by(username=pesquisa)
+    members = CompanyMembers.query.filter(CompanyMembers.company_id==current_user.membership.company_id).all()
 
-    members = CompanyMembers.query.filter(CompanyMembers.company_id==current_user.membership.company_id)
+    if pesquisa and pesquisa != '':
+        members = User.query.filter(User.username.ilike(f'{pesquisa}')).all()
 
     return render_template('ceo.html', members=members)
 
