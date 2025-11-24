@@ -4,6 +4,7 @@ from app.models import User, Role, Permissions, CompanyMembers
 from flask_login import current_user
 from .forms import RoleForm, MemberForm, EditMemberForm
 from ..auth.utils import send_first_password, generate_password
+from sqlalchemy import or_
 
 ceo_bp = Blueprint('ceo', __name__, template_folder='./templates')
 
@@ -13,10 +14,18 @@ def ceo_page():
 
     pesquisa = request.args.get('pesquisa', '')
 
-    members = CompanyMembers.query.filter(CompanyMembers.company_id==current_user.membership.company_id).all()
-
+    query = CompanyMembers.query.join(User).filter(
+        CompanyMembers.company_id == current_user.membership.company_id
+    )
     if pesquisa and pesquisa != '':
-        members = User.query.filter(User.username.ilike(f'{pesquisa}')).all()
+        query = query.filter(
+            or_(
+                User.username.ilike(f'%{pesquisa}%'),
+                User.email.ilike(f'%{pesquisa}%'),
+            )
+        )
+
+    members = query.all()
 
     return render_template('ceo.html', members=members)
 
@@ -67,11 +76,13 @@ def edit_member(id):
     form.username.default = user.username
 
     if form.validate_on_submit():
+        print("validou o form")
         user.username = form.username.data
         user.email = form.email.data
-        user.membership.role = form.role.data
-        user.membership.role.permissions = form.permissions.data
-
+        user.membership.role_id = form.role.data
+        user.membership.role.permissions_id = form.permissions.data
+        db.session.commit()
+        flash(f'Informações de {user.username} foram atualizadas', 'success')
         return redirect(url_for('ceo.ceo_page'))
     
     return render_template('edit_member.html', form=form, user=user)
