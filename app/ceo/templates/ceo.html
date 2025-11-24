@@ -1,27 +1,149 @@
 {% extends 'base_ceo.html' %}
-{%block content%}
+{% block content %}
 
-    <div class="table">
-        <table>
-            <thead>
+<!-- Estilos específicos para replicar o design do Figma -->
+<style>
+    .panel-container {
+        margin: 20px;
+        background-color: #A8E6CF; /* Cor menta do fundo */
+        padding: 30px;
+        border-radius: 20px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        font-family: sans-serif;
+    }
+
+    .panel-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .panel-title {
+        color: #fff;
+        font-size: 2rem;
+        font-weight: bold;
+        text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        margin: 0;
+    }
+
+    .search-input {
+        border-radius: 20px;
+        border: none;
+        padding: 8px 20px;
+        width: 300px;
+        outline: none;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    /* Tabela flutuante */
+    .custom-table {
+        width: 100%;
+        border-collapse: separate; /* Essencial para o espaçamento entre linhas */
+        border-spacing: 0 10px; /* Espaço vertical entre as 'linhas-cards' */
+    }
+
+    .custom-table thead tr th {
+        background-color: white;
+        color: #333;
+        font-weight: bold;
+        padding: 15px;
+        border: none;
+        text-align: left;
+    }
+    
+    /* Arredondar cabeçalho */
+    .custom-table thead tr th:first-child { border-top-left-radius: 50px; border-bottom-left-radius: 50px; padding-left: 30px; }
+    .custom-table thead tr th:last-child { border-top-right-radius: 50px; border-bottom-right-radius: 50px; text-align: center;}
+
+    /* Linhas do corpo como Cards */
+    .custom-table tbody tr {
+        background-color: white;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        transition: transform 0.2s;
+    }
+
+    .custom-table tbody tr:hover {
+        transform: translateY(-2px);
+    }
+
+    .custom-table tbody td {
+        padding: 15px;
+        background-color: white; /* Necessário para cobrir o espaçamento se houver */
+        border: none;
+        vertical-align: middle;
+        font-weight: 500;
+        color: #333;
+    }
+
+    /* Arredondar cantos das linhas (primeira e última célula) */
+    .custom-table tbody td:first-child {
+        border-top-left-radius: 50px;
+        border-bottom-left-radius: 50px;
+        padding-left: 30px;
+        font-weight: bold;
+    }
+
+    .custom-table tbody td:last-child {
+        border-top-right-radius: 50px;
+        border-bottom-right-radius: 50px;
+        text-align: center;
+    }
+
+    /* Botão de Ação */
+    .btn-action {
+        background-color: #A2D2FF; /* Azul claro do botão */
+        color: white;
+        padding: 8px 20px;
+        border-radius: 20px;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 0.9rem;
+        transition: background 0.3s;
+        display: inline-block;
+    }
+
+    .btn-action:hover {
+        background-color: #8bc0f0;
+        color: white;
+        text-decoration: none;
+    }
+</style>
+
+<div class="panel-container">
+    <!-- Cabeçalho com Título e Pesquisa -->
+    <form method="get" class="panel-header">
+        <h2 class="panel-title">Funcionários</h2>
+        <input type="text" class="search-input" placeholder="Pesquisa">
+    </form>
+
+    <table class="custom-table">
+        <thead>
+            <tr>
+                <!-- Adicionei ID para bater com a imagem -->
+                <th scope="col" style="width: 50px;">ID</th> 
+                <th scope="col">Nome do funcionário</th>
+                <th scope="col">Email</th>
+                <th scope="col">Cargo</th>
+                <th scope="col">Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for member in members %}
                 <tr>
-                    <th>Nome do usuário</th>
-                    <th>Email</th>
-                    <th>Função</th>
-                    <th>Ações</th>
+                    <td>{{ member.user_id }}</td>
+                    <td>{{ member.user.username }}</td>
+                    <td style="color: #666; font-size: 0.9em;">{{ member.user.email }}</td>
+                    <td>{{ member.role.name }}</td>
+                    <td>
+                        <a href="{{ url_for('ceo.edit_member', id=member.user_id) }}" class="btn-action">
+                            Editar
+                        </a>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                {% for member in members %}
-                    <tr>
-                        <td>{{member.user.username}}</td>
-                        <td>{{member.user.email}}</td>
-                        <td>{{member.role.name}}</td>
-                        <td><a href="{{ url_for('ceo.edit_member', id=member.user_id)}}" class="btn">Detalhes</a></td>
-                    </tr>
-                {%endfor%}
-            </tbody>
-        </table>
-    </div>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
-{%endblock%}
+{% endblock %}

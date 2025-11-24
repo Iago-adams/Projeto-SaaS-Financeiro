@@ -31,8 +31,10 @@ def permission_required(f):
 
         #pega o caminho e no dirname pega só as pastas em que eles está contido, dps o basename pega o último arquivo, que será a pasta
         directory = os.path.basename(os.path.dirname(path))
+        print(directory)
 
         permissions = current_user.membership.role.permissions #é para pegar as permissões do usuário
+        print(permissions.codename)
 
         if permissions is None: #erro 500 ,só Deus sabe o que ocasiona o problema
             abort(500)
