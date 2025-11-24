@@ -39,6 +39,7 @@ def calculate_kpis_from_dataframe(df):
         "current_balance": current_balance
     }
 
+'''
 def generate_lineGraph_extract(exctract_data_normalized):
     
     #configuração do gráfico linear
@@ -100,3 +101,42 @@ def generate_lineGraph_extract(exctract_data_normalized):
     graph_extract_data_line_html = pio.to_html(fig_extract_data_line, full_html=False, include_plotlyjs='cdn')
     
     return graph_extract_data_line_html
+'''
+
+def get_extract_figure(exctract_data_normalized):
+    """
+    Cria e retorna o OBJETO FIGURE do Plotly.
+    Essa função é usada tanto pelo renderizador HTML quanto pelo gerador de PDF.
+    """
+    
+    fig_extract_data_line = px.line(
+        exctract_data_normalized,
+        x='completedAt',
+        y='amount',
+        title='Fluxo de Caixa (Receitas vs. Despesas)',
+        labels={'completedAt': 'Data da Transação', 'amount': 'Valor (R$)'},
+        template='plotly_white',
+        markers=True
+    )
+
+    fig_extract_data_line.update_layout(
+        yaxis_tickprefix='R$ ',
+        yaxis_tickformat=',.2f',
+        shapes=[
+            dict(
+                type='line', yref='y', y0=0, xref='paper', x0=0, x1=1,
+                line=dict(color='Gray', width=1.5, dash='dash')
+            )
+        ],
+        font=dict(family="Arial, sans-serif", size=12, color="#333333")
+    )
+    
+    # DIFERENÇA CRUCIAL: Retornamos o objeto 'fig', não o HTML
+    return fig_extract_data_line
+
+def generate_lineGraph_extract_html(exctract_data_normalized):
+    """
+    Função wrapper para manter compatibilidade com seu Frontend atual.
+    """
+    fig = get_extract_figure(exctract_data_normalized)
+    return pio.to_html(fig, full_html=False, include_plotlyjs='cdn')
