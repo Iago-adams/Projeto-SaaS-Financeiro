@@ -114,7 +114,7 @@
     <!-- Cabeçalho com Título e Pesquisa -->
     <form method="get" class="panel-header">
         <h2 class="panel-title">Funcionários</h2>
-        <input type="text" class="search-input" placeholder="Pesquisa">
+        <input type="text" name="pesquisa" class="search-input" placeholder="Pesquisa" value="{{ request.args.get('pesquisa', '') }}">
     </form>
 
     <table class="custom-table">

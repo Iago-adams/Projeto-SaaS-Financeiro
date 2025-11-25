@@ -95,15 +95,14 @@ def register_ceo():
             flash('Credenciais inválidas.', 'danger')
             return redirect(url_for('auth.register_company'))
         
-        db.session.add(company)
-        db.session.commit()
+        
 
         #puxa os dados da sessão
         FormSecrets = session.get('FormSecrets', {})
 
         #passa diretamente pro secrets que sera commitado no db
         secrets = Secrets(**FormSecrets)
-        secrets.company_id = company.id
+        
         #verifica se os secrets ja estao cadastrados
         verify_account_id = Secrets.query.filter_by(acount_id=secrets.acount_id).first()
         verify_client_id = Secrets.query.filter_by(client_id=secrets.client_id).first()
@@ -138,6 +137,9 @@ def register_ceo():
             flash(error_message, 'danger')
             return redirect(url_for('auth.register_ceo'))
 
+        db.session.add(company)
+        db.session.commit()
+        secrets.company_id = company.id
         ceo.set_password(form.password.data)
         db.session.add(secrets)
         db.session.add(ceo)

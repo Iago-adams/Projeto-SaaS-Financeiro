@@ -79,7 +79,7 @@ class Company(db.Model):
 class Secrets(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     acount_id = db.Column(db.String(128), unique=True, nullable=False) #não precisa de criptografia
-    client_id = db.Column(db.String(128), unique=True, nullable=False) #encryptado
+    client_id = db.Column(db.String(256), unique=True, nullable=False) #encryptado
     client_secret = db.Column(db.String(256), nullable=False) #encryptado
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
 
@@ -90,7 +90,7 @@ class Secrets(db.Model):
 
 class Role(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), unique=True, nullable=False)
+    name = db.Column(db.String(64), unique=False, nullable=False)
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
 
     # Relação: A função pertence a uma empresa.
