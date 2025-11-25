@@ -9,7 +9,7 @@ class LoginForm(FlaskForm):
 
 class RegisterCompanyForm(FlaskForm):
     name = StringField('Nome da empresa', validators=[DataRequired()])
-    cnpj = IntegerField('CNPJ', validators=[DataRequired()])
+    cnpj = StringField('CNPJ', validators=[DataRequired()])
     btnSubmit = SubmitField ('Registrar empresa')
 
 class RegisterSecretForm(FlaskForm):

@@ -11,7 +11,7 @@ ceo_bp = Blueprint('ceo', __name__, template_folder='./templates')
 
 #rota básica do ceo, deve listar todos os membros
 @ceo_bp.route('/', methods=['GET', 'POST'])
-@permission_required
+#@permission_required
 def ceo_page():
 
     pesquisa = request.args.get('pesquisa', '')
