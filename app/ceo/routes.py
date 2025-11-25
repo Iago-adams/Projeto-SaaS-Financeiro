@@ -1,15 +1,17 @@
 from flask import Blueprint, render_template, flash, redirect, url_for, request, abort
 from app import db
-from app.models import User, Role, Permissions, CompanyMembers
+from app.models import User, Role, Permissions, CompanyMembers, RolePermissions
 from flask_login import current_user
 from .forms import RoleForm, MemberForm, EditMemberForm
 from ..auth.utils import send_first_password, generate_password
+from ..decorators import permission_required
 from sqlalchemy import or_
 
 ceo_bp = Blueprint('ceo', __name__, template_folder='./templates')
 
 #rota básica do ceo, deve listar todos os membros
 @ceo_bp.route('/', methods=['GET', 'POST'])
+@permission_required
 def ceo_page():
 
     pesquisa = request.args.get('pesquisa', '')
@@ -29,7 +31,7 @@ def ceo_page():
 
     return render_template('ceo.html', members=members)
 
-@ceo_bp.route('/adicionar/colaborador/', methods=['GET', 'POST'])
+@ceo_bp.route('/adicionar/funcionario/', methods=['GET', 'POST'])
 def add_member():
     form = MemberForm()
 
@@ -65,7 +67,7 @@ def add_member():
     
     return render_template('add_member.html', form=form)
 
-@ceo_bp.route('/editar/<int:id>/colaborador/', methods=['GET', 'POST'])
+@ceo_bp.route('/editar/<int:id>/funcionario/', methods=['GET', 'POST'])
 def edit_member(id):
     user = User.query.get_or_404(id)
     form = EditMemberForm()
@@ -87,8 +89,7 @@ def edit_member(id):
     
     return render_template('edit_member.html', form=form, user=user)
 
-
-@ceo_bp.route('/deletar/<int:id>/colaborador/', methods=['POST'])
+@ceo_bp.route('/deletar/<int:id>/funcionario/', methods=['POST'])
 def delete_member(id):
     user = User.query.get(id)
 
@@ -103,7 +104,6 @@ def delete_member(id):
     
     return abort(404)
 
-
 @ceo_bp.route('/adicionar/funcao/', methods=['GET', 'POST'])
 def add_role():
     form = RoleForm()
@@ -115,11 +115,24 @@ def add_role():
             name=form.name.data,
             company_id=current_user.membership.company_id
         )
-
-        for perm in form.permissions.data:
-            role.permissions.permissions_id = perm
-        
         db.session.add(role)
+        db.session.commit()
+
+        perms = Permissions.query.filter(Permissions.id.in_(form.permissions.data)).all()
+        print(perms)
+
+        role_perms = []
+        
+        for perm in perms:
+            role_perm = RolePermissions(
+                role_id=role.id,
+                permission_id = perm.id
+            )
+
+            role_perms.append(role_perm)
+    
+        role.permissions = role_perms
+        
         db.session.commit()
 
         flash(f'Função {role.name} foi criada', 'success')
@@ -127,3 +140,4 @@ def add_role():
         return redirect(url_for('ceo.ceo_page'))
 
     return render_template('add_role.html', form=form)
+
