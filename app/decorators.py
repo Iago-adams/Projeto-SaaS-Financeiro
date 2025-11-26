@@ -9,12 +9,10 @@ def permission_required(f):
     def wrapper(*args, **kwargs):
 
         route = request.blueprint
-        print(route)
         
         if not current_user.is_authenticated:
             abort(401)
 
-        print(current_user.permissions)
         if current_user.has_permission(route):
             return f(*args, **kwargs)
         

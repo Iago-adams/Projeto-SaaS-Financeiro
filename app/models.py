@@ -142,20 +142,20 @@ class Permissions(db.Model):
 class APIData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     encrypt_data = db.Column(db.Text, nullable=False)
-    last_update = db.Column(db.DateTime, default=datetime.utcnow)
+    last_update = db.Column(db.DateTime, default=datetime.datetime.now)
     expires = db.Column(db.DateTime, nullable=False)
-    company_id = db.Column(db.Integer, db.ForeignKey('compan.id'), nullable=False)
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
 
     # Relação: Uma APIData pertence a uma única empresa
     company = db.relationship('Company', back_populates='data')
 
     def is_valid(self):
-        return datetime.utcnow() < self.expires
+        return datetime.now() < self.expires
     
     def update_data(self, json):
         json_str = json.dumps(json)
         self.encrypt_data = encrypt(json_str)
-        self.last_update = datetime.utcnow()
+        self.last_update = datetime.datetime.now()
     
     @property
     def data(self):
