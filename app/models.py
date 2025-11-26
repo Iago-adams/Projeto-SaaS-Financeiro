@@ -5,6 +5,7 @@ from flask import current_app
 from .services.hashing import hash_password, verify_password
 import datetime
 from .services.encryption import encrypt, decrypt
+import json
 
 class User(db.Model, UserMixin):    
     id = db.Column(db.Integer, primary_key=True)    
@@ -92,6 +93,8 @@ class Company(db.Model):
     members = db.relationship('CompanyMembers', back_populates='company', cascade="all, delete-orphan")
     # Relação: Uma empresa define várias funções (roles).
     roles = db.relationship('Role', back_populates='company', cascade="all, delete-orphan")
+    # Relação: Uma empresa possui vários APIData (1-n)
+    data = db.relationship('APIData', back_populates='company', cascade="all, delete-orphan")
 
 
 class Secrets(db.Model):
@@ -139,15 +142,22 @@ class Permissions(db.Model):
 class APIData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     encrypt_data = db.Column(db.Text, nullable=False)
-    last_update = db.Column(db.DateTime, default=datetime.utcnow())
+    last_update = db.Column(db.DateTime, default=datetime.utcnow)
     expires = db.Column(db.DateTime, nullable=False)
+    company_id = db.Column(db.Integer, db.ForeignKey('compan.id'), nullable=False)
+
+    # Relação: Uma APIData pertence a uma única empresa
+    company = db.relationship('Company', back_populates='data')
 
     def is_valid(self):
-        return datetime.utcnow() > self.expires
+        return datetime.utcnow() < self.expires
     
     def update_data(self, json):
-        self.encrypt_data = encrypt(json)
+        json_str = json.dumps(json)
+        self.encrypt_data = encrypt(json_str)
+        self.last_update = datetime.utcnow()
     
     @property
     def data(self):
-        return decrypt(self.encrypt_data)
+        decrypted_str = decrypt(self.encrypt_data)
+        return json.loads(decrypted_str)
