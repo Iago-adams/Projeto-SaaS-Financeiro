@@ -4,6 +4,7 @@ from itsdangerous import URLSafeTimedSerializer
 from flask import current_app
 from .services.hashing import hash_password, verify_password
 import datetime
+from .services.encryption import encrypt, decrypt
 
 class User(db.Model, UserMixin):    
     id = db.Column(db.Integer, primary_key=True)    
@@ -137,9 +138,16 @@ class Permissions(db.Model):
 
 class APIData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    data = db.Column(db.Text, nullable=False)
+    encrypt_data = db.Column(db.Text, nullable=False)
     last_update = db.Column(db.DateTime, default=datetime.utcnow())
     expires = db.Column(db.DateTime, nullable=False)
 
     def is_valid(self):
         return datetime.utcnow() > self.expires
+    
+    def update_data(self, json):
+        self.encrypt_data = encrypt(json)
+    
+    @property
+    def data(self):
+        return decrypt(self.encrypt_data)
