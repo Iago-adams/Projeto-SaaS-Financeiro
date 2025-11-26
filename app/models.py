@@ -3,6 +3,7 @@ from flask_login import UserMixin
 from itsdangerous import URLSafeTimedSerializer
 from flask import current_app
 from .services.hashing import hash_password, verify_password
+import datetime
 
 class User(db.Model, UserMixin):    
     id = db.Column(db.Integer, primary_key=True)    
@@ -10,7 +11,6 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)    
     password_hash = db.Column(db.String(255), nullable=False)       
     isSuperUser = db.Column(db.Boolean, nullable=False, default=False)
-
 
     membership = db.relationship('CompanyMembers', foreign_keys='CompanyMembers.user_id', back_populates='user', uselist=False, cascade="all, delete-orphan")
 
@@ -135,4 +135,11 @@ class Permissions(db.Model):
     roles = db.relationship('RolePermissions', foreign_keys='RolePermissions.permission_id', back_populates='permission')
 
 
-#encriptar ou hashear o client_id e client_secret
+class APIData(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    data = db.Column(db.Text, nullable=False)
+    last_update = db.Column(db.DateTime, default=datetime.utcnow())
+    expires = db.Column(db.DateTime, nullable=False)
+
+    def is_valid(self):
+        return datetime.utcnow() > self.expires
