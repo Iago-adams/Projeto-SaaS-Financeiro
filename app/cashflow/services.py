@@ -4,11 +4,10 @@ from .analysis import generate_lineGraph_extract_html, normalize_JSON_transactio
 from .reports import generate_cashflow_PDF
 from ..models import CompanyMembers, Role, Permissions, RolePermissions, User
 from .tasks import send_reports_background
-from flask import abort
 
-def generate_extract_graph(acount_id):
+def generate_extract_graph(account_id, agency_id):
     #pega os dados da API de extrato bancario
-    extract_API_data = get_financial_JSON(acount_id)
+    extract_API_data = get_financial_JSON(account_id, agency_id)
     
     #Normaliza os dados para enviar o gerenerate line graph
     normalized_JSON = normalize_JSON_transactions(extract_API_data)
@@ -59,20 +58,20 @@ def get_cashflow_kpis_json():
     send_reports_background(pdf, emailsList, company_name)
     return None'''
     
-def send_cashflow_pdf(acount_id, company_name):
+def send_cashflow_pdf(account_id, agency_id , company_name):
     # ... (sua parte de gerar o PDF continua igual) ...
-    extract_API_data = get_financial_JSON(acount_id)
+    extract_API_data = get_financial_JSON(account_id, agency_id)
     normalized_df = normalize_JSON_transactions(extract_API_data)
     kpis = calculate_kpis_from_dataframe(normalized_df)
     pdf_bytes = generate_cashflow_PDF(company_name, kpis, normalized_df)
     
     recipient_emails = []
 
-    print(f"\n--- INICIANDO DEBUG MANUAL PARA EMPRESA ID: {acount_id} ---")
+    print(f"\n--- INICIANDO DEBUG MANUAL PARA EMPRESA ID: {account_id} ---")
     
     # PASSO 1: Buscar membros sem JOIN
     # Força conversão para INT caso esteja vindo como String
-    members = CompanyMembers.query.filter_by(company_id=int(acount_id)).all()
+    members = CompanyMembers.query.filter_by(company_id=int(account_id)).all()
     print(f"1. Membros encontrados na empresa: {len(members)}")
 
     for m in members:
