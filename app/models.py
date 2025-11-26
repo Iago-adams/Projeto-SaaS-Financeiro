@@ -30,6 +30,23 @@ class User(db.Model, UserMixin):
 
         return serializer.dumps(self.email, salt=self.password_hash)
     
+    @property
+    def permissions(self):
+        if not self.membership:
+            return []
+        
+        perms = self.membership.role.permissions
+        '''for perm in perms:
+            print(perm.permission.codename)'''
+        return [p.permission.codename for p in perms]
+    
+    def has_permission(self, codename):
+        if self.permissions == []:
+            return False
+        
+        elif codename in self.permissions:
+            return True
+    
     #Método que verifica se o token é válido
     @staticmethod
     def verify_token(token, user_id):

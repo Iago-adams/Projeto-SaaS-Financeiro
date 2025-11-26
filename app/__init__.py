@@ -7,7 +7,7 @@ from .models import User, Permissions
 #explicação tecnica pro ponto é que ele manda o flask procurar no mesmo pacote basicamente
 
 def create_permissions():
-    perms = {'CEO':'Acesso as configuração da empresa',
+    perms = {'ceo':'Acesso as configuração da empresa',
              'cashflow':'Acesso ao fluxo de caixa', } #caso necessário só aumentar a key e o codename o value o name
 
     for perm in perms: #ele vai entrar e pegar as keys do dict e vai adicionar no db
