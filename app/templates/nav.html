@@ -1,3 +1,36 @@
+<style>
+    /* Estilização da Caixa do Dropdown */
+    .custom-dropdown-menu {
+        border: none;
+        border-radius: 15px; /* Bordas bem arredondadas */
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15); /* Sombra suave para flutuar */
+        padding: 10px; /* Espaço interno */
+        margin-top: 10px; /* Afasta um pouco da barra */
+        animation: fadeIn 0.3s ease; /* Animação de entrada */
+    }
+
+    /* Animação suave de aparecer */
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Estilização dos Itens (Links) */
+    .custom-dropdown-item {
+        border-radius: 10px; /* Itens redondinhos */
+        padding: 10px 15px;
+        color: #555;
+        font-weight: 600;
+        transition: all 0.2s ease; /* Transição suave */
+    }
+
+    /* Efeito ao passar o mouse (Hover) */
+    .custom-dropdown-item:hover {
+        background-color: #99E6DA; /* A cor da sua marca! */
+        color: white; /* Texto fica branco */
+        transform: translateX(5px); /* Move um pouquinho para a direita */
+    }
+</style>
 <nav class="navbar navbar-expand-lg navbar-light fixed top" style="background-color:#99E6DA;">
     <div class="container-fluid">
         <a class="navbar-brand d-flex align-items-center gap-2" href="{{ url_for('main.homepage') }}">
@@ -5,20 +38,47 @@
         </a>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item fw-bold"><a class="nav-link" style="color: white; text-shadow: 1px 1px 5px #000;" href="#">Dashboard</a></li>
-                <li class="nav-item fw-bold"><a class="nav-link" style="color: white; text-shadow: 1px 1px 5px #000;" href="#">Relatórios</a></li>
-                <li class="nav-item fw-bold"><a class="nav-link" style="color: white; text-shadow: 1px 1px 5px #000;" href="{{url_for('cashflow.cashflow')}}">Fluxo de Caixa</a></li>
-                <li class="nav-item fw-bold"><a class="nav-link" style="color: white; text-shadow: 1px 1px 5px #000;" href="#">Colaboradores</a></li>
-                <li class="nav-item fw-bold"><a class="nav-link" style="color: white; text-shadow: 1px 1px 5px #000;" href="{{url_for('ceo.ceo_page')}}">Funcionários</a></li>
+                <li class="nav-item fw-bold">
+                    <a class="nav-link" style="color: white; text-shadow: 1px 1px 5px #000;" href="{{url_for('cashflow.cashflow')}}">
+                        <i class="bi bi-graph-up-arrow"></i> Fluxo de Caixa
+                    </a>
+                </li>
+                <li class="nav-item fw-bold">
+                    <a class="nav-link" style="color: white; text-shadow: 1px 1px 5px #000;" href="#">
+                        <i class="bi bi-people-fill"></i> Colaboradores
+                    </a>
+                </li>
+                <li class="nav-item fw-bold">
+                    <a class="nav-link" style="color: white; text-shadow: 1px 1px 5px #000;" href="{{url_for('ceo.ceo_page')}}">
+                        <i class="bi bi-person-badge-fill"></i> Funcionários
+                    </a>
+                </li>
+                <li class="nav-item dropdown fw-bold">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="color: white; text-shadow: 1px 1px 5px #000;">
+                        <i class="bi bi-plus-circle-fill"></i> Adicionar
+                    </a>
+                    <ul class="dropdown-menu custom-dropdown-menu">
+                        <li>
+                            <a class="dropdown-item custom-dropdown-item" href="{{ url_for('ceo.add_member') }}">
+                                <i class="bi bi-person-plus-fill"></i> Adicionar Funcionário
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item custom-dropdown-item" href="{{ url_for('ceo.add_role') }}">
+                                <i class="bi bi-shield-lock-fill"></i> Adicionar Função
+                            </a>
+                        </li>
+                    </ul>
+                </li>
             </ul>
             <div class="d-flex align-items-center gap-3">
                 <div class="d-flex align-items-center">
                 {% if current_user.is_authenticated %}
                     <img src="{{ url_for('static', filename='img/avatar.png') }}" alt="avatar" width="40" height="40" class="rounded-circle me-2"/>
                     <span class="text-white fw-bold" style="text-shadow: 1px 1px 5px #000;">{{ current_user.username }} ({{ current_user.membership.role.name }})</span>
-                    <a class="btn fw-bold ms-3" style="background-color: #F3A5A5; color: white; text-shadow: 1px 1px 5px #000;" href="{{ url_for('auth.logout') }}">Sair</a>
+                    <a class="btn fw-bold ms-3" style="background-color: #FF2800; color: white; text-shadow: 1px 1px 5px #000;" href="{{ url_for('auth.logout') }}">Sair</a>
                 {% else %}
-                    <a class="btn fw-bold ms-3" style="background-color: #9FF59F; color: white; text-shadow: 1px 1px 5px #000;" href="{{ url_for('auth.login') }}">Login</a>
+                    <a class="btn fw-bold ms-3" style="background-color: #52E252; color: white; text-shadow: 1px 1px 5px #000;" href="{{ url_for('auth.login') }}">Login</a>
                 {%  endif %}
                 </div>
             </div>
