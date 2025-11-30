@@ -6,8 +6,6 @@ EXTRACT_BASE_URL = 'https://api.hm.bb.com.br/extratos/v1'
 OAUTH_TOKEN_URL = 'https://oauth.hm.bb.com.br/oauth/token'
 
 def get_token(client_id: str, client_secret: str, scope: str = "extratos.consultar"):
-    #Url da api(no momento é a url do mock)
-    #token_url = 'http://127.0.0.1:5001/oauth/token'
     
     #dados enviado para a API
     payload = {
@@ -53,19 +51,24 @@ def get_token(client_id: str, client_secret: str, scope: str = "extratos.consult
         return None
     
 def get_extract_data(acess_token: str, account_id: str, app_key: str, agency_id: str):
-        #inserir aqui a url do endipoint da API
-    #data_url = f'http://127.0.0.1:5001/contas/{account_id}/extrato'
-    
     #remove os zeros a esquerda de acordo com o pedido pela documentação
     agencia_fmt = str(agency_id).lstrip('0')
     conta_fmt = str(account_id).lstrip('0')
 
-    endpoint = f"{EXTRACT_BASE_URL}/conta-corrente/agencia/{agencia_fmt}/conta/{conta_fmt}"
+    endpoint = f"{EXTRACT_BASE_URL}/conta-corrente/agencia/{agencia_fmt}/conta/{conta_fmt}/extrato"
+    
+    # LÓGICA DO HEADER DE TESTE
+    # Se estamos usando a conta de exemplo da doc (1348), usamos o MCI específico dela.
+    mci_header = 'teste' # Valor padrão
+    if conta_fmt == '1348' and agencia_fmt == '1505':
+        mci_header = '178961031' # MCI OBRIGATÓRIO para a conta 1348
+    elif conta_fmt == '5087' and agencia_fmt == '551':
+        mci_header = '26968930'
     
     headers = {
         'Authorization': f'Bearer {acess_token}',
         'Content-Type': 'application/json',
-        'x-br-com-bb-ipa-mci': 'teste'
+        'x-br-com-bb-ipa-mciteste': mci_header # <--- Agora está dinâmico e correto
     }
     
     params = {
@@ -73,6 +76,8 @@ def get_extract_data(acess_token: str, account_id: str, app_key: str, agency_id:
         'numeroPaginaSolicitacao': 1,
         'quantidadeRegistroPaginaSolicitacao': 200
     }
+    
+    print(f"--- API REQUEST: {endpoint} ---")
     
     try:
         response = requests.get(endpoint, headers=headers, params=params, verify=True)
