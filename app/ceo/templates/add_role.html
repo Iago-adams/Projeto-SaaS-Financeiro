@@ -1,29 +1,181 @@
 {% extends 'base_ceo.html' %}
-{%block content%}
 
-<div class="table container-fluid">
-    <form method="post">
-        {{ form.csrf_token }}
+{% block content %}
 
-        <div class="mb-3">
-            {{ form.name.label(class="form-label") }}
-            {{ form.name(class="form-control") }}
-        </div>
+<style>
+    /* --- CORES E ESTRUTURA BASE (Vindas do seu código) --- */
 
-        <div class="mb-3">
-            {{ form.permissions.label(class="form-label") }}
+    /* Container Verde-Água */
+    .main-container {
+        background-color: #99E6DA; /* Sua cor personalizada */
+        border-radius: 20px;
+        padding: 30px;
+        margin: 20px auto;
+        max-width: 900px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
 
-            {% for subfield in form.permissions %}
-                <div class="form-check">    
-                    {{ subfield(class="btn btnchekck")}}
-                    {{subfield.label(class="form-label")}}
+    /* Título */
+    .page-title {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #fff;
+        text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
+        margin-bottom: 25px;
+        padding-left: 10px;
+    }
+
+    /* Card Branco */
+    .form-card-container {
+        background-color: white;
+        border-radius: 25px;
+        padding: 40px 60px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        min-height: 400px;
+    }
+
+    /* Espaçamento */
+    .form-group-custom {
+        margin-bottom: 25px;
+    }
+
+    /* Labels */
+    .form-label-custom {
+        display: block;
+        font-size: 1.1rem;
+        color: #333;
+        margin-bottom: 8px;
+        margin-left: 10px;
+        font-weight: 500;
+    }
+
+    /* Inputs Pílula */
+    .custom-input {
+        width: 100%;
+        padding: 12px 25px;
+        border-radius: 50px !important;
+        border: 1px solid #999;
+        font-size: 1rem;
+        outline: none;
+        box-sizing: border-box;
+        transition: border-color 0.3s;
+        background-color: #fff;
+    }
+    .custom-input:focus {
+        border-color: #2E7D32;
+        box-shadow: 0 0 5px rgba(46, 125, 50, 0.2);
+    }
+
+    /* Botão Salvar (Verde #52E252) */
+    .btn-salvar {
+        background-color: #52E252; /* Sua cor exata */
+        color: white;
+        border: none;
+        padding: 12px 40px;
+        border-radius: 50px;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 1rem;
+        transition: background 0.3s, transform 0.2s;
+    }
+    .btn-salvar:hover {
+        background-color: #3ba53b;
+        transform: translateY(-2px);
+    }
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 40px;
+    }
+
+    /* --- ESTILOS ESPECÍFICOS PARA OS CHECKBOXES DE PERMISSÃO --- */
+    
+    .permissions-container {
+        background-color: #f8fcfb; /* Um fundo bem suave pra destacar a área */
+        padding: 20px;
+        border-radius: 15px;
+        border: 1px solid #e0e0e0;
+    }
+
+    .permissions-grid {
+        display: grid;
+        /* Cria colunas automáticas com largura mínima de 220px */
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); 
+        gap: 15px;
+        margin-top: 10px;
+    }
+
+    .permission-item {
+        display: flex;
+        align-items: center;
+        background-color: white;
+        padding: 10px 15px;
+        border-radius: 10px;
+        border: 1px solid #eee;
+        transition: border-color 0.3s;
+    }
+
+    .permission-item:hover {
+        border-color: #99E6DA;
+    }
+
+    /* Checkbox customizado */
+    .custom-checkbox {
+        width: 18px;
+        height: 18px;
+        margin-right: 10px;
+        cursor: pointer;
+        accent-color: #00FFEF; /* Cor do check quando marcado */
+    }
+
+    .permission-label {
+        font-size: 0.95rem;
+        color: #555;
+        cursor: pointer;
+        margin-bottom: 0; /* Remove margem padrão do bootstrap se houver */
+    }
+
+</style>
+
+<main class="main-container">
+
+    <div class="controls-header">
+        <h1 class="page-title">Nova Função</h1>
+    </div>
+
+    <div class="form-card-container">
+        
+        <form method="post">
+            {{ form.csrf_token }}
+
+            <div class="form-group-custom">
+                {{ form.name.label(class="form-label-custom") }}
+                {{ form.name(class="custom-input", placeholder="Ex: Gerente Financeiro") }}
+            </div>
+
+            <div class="form-group-custom">
+                <label class="form-label-custom">Permissões de Acesso</label>
+                
+                <div class="permissions-container">
+                    <div class="permissions-grid">
+                        {% for subfield in form.permissions %}
+                            <div class="permission-item">
+                                {{ subfield(class="custom-checkbox") }}
+                                {{ subfield.label(class="permission-label") }}
+                            </div>
+                        {% endfor %}
+                    </div>
                 </div>
-            {% endfor %}
-        </div>
+            </div>
 
-        {{ form.btnSubmit(class="btn btn-success mt-3") }}
-    </form>
-</div>
+            <div class="form-actions">
+                {{ form.btnSubmit(class="btn-salvar", value="Criar Função") }}
+            </div>
 
+        </form>
+    </div>
 
-{%endblock%}
+</main>
+
+{% endblock %}
