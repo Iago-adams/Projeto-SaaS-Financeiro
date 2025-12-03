@@ -72,8 +72,8 @@ def edit_member(id):
     user = User.query.get_or_404(id)
     form = EditMemberForm()
 
-    form.role.choices = [(r.id, r.name) for r in Role.query.all()]
-    form.permissions.choices = [(p.id, p.name) for p in Permissions.query.all()]
+    form.role.choices = [(r.id, r.name) for r in Role.query.filter(Role.company_id==current_user.id).all()]
+    form.permissions.choices = [(p.id, p.name) for p in Permissions.query.filter(Permissions.roles.role.company_id==current_user.id).all()]
 
     form.username.default = user.username
 

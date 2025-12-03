@@ -3,6 +3,9 @@ from flask_login import UserMixin
 from itsdangerous import URLSafeTimedSerializer
 from flask import current_app
 from .services.hashing import hash_password, verify_password
+import datetime
+from .services.encryption import encrypt, decrypt
+import json
 
 class User(db.Model, UserMixin):    
     id = db.Column(db.Integer, primary_key=True)    
@@ -10,7 +13,6 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)    
     password_hash = db.Column(db.String(255), nullable=False)       
     isSuperUser = db.Column(db.Boolean, nullable=False, default=False)
-
 
     membership = db.relationship('CompanyMembers', foreign_keys='CompanyMembers.user_id', back_populates='user', uselist=False, cascade="all, delete-orphan")
 
@@ -91,6 +93,8 @@ class Company(db.Model):
     members = db.relationship('CompanyMembers', back_populates='company', cascade="all, delete-orphan")
     # Relação: Uma empresa define várias funções (roles).
     roles = db.relationship('Role', back_populates='company', cascade="all, delete-orphan")
+    # Relação: Uma empresa possui vários APIData (1-n)
+    data = db.relationship('APIData', back_populates='company', cascade="all, delete-orphan")
 
 
 class Secrets(db.Model):
@@ -135,4 +139,25 @@ class Permissions(db.Model):
     roles = db.relationship('RolePermissions', foreign_keys='RolePermissions.permission_id', back_populates='permission')
 
 
-#encriptar ou hashear o client_id e client_secret
+class APIData(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    encrypt_data = db.Column(db.Text, nullable=False)
+    last_update = db.Column(db.DateTime, default=datetime.datetime.now)
+    expires = db.Column(db.DateTime, nullable=False)
+    company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
+
+    # Relação: Uma APIData pertence a uma única empresa
+    company = db.relationship('Company', back_populates='data')
+
+    def is_valid(self):
+        return datetime.now() < self.expires
+    
+    def update_data(self, json):
+        json_str = json.dumps(json)
+        self.encrypt_data = encrypt(json_str)
+        self.last_update = datetime.datetime.now()
+    
+    @property
+    def data(self):
+        decrypted_str = decrypt(self.encrypt_data)
+        return json.loads(decrypted_str)
