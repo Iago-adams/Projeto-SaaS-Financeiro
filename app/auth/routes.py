@@ -191,6 +191,7 @@ def reset_password(token, id):
     if form.validate_on_submit():
         print(form.password.data)
         user.set_password(form.password.data)
+        db.session.commit()
 
         return redirect(url_for('auth.login'))
     
