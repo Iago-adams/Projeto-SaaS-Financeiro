@@ -3,7 +3,7 @@ from app.models import User, Company, Secrets, Role
 from .forms import LoginForm, RegisterCompanyForm, RegisterSecretForm, RegisterCEOForm, RequestResetForm, ResetPasswordForm
 from flask_login import login_user, logout_user, login_required, current_user
 from app import db
-from .utils import create_ceo, validate_password_policy
+from .utils import create_ceo, validate_password_policy, send_reset_password
 from ..services.encryption import encrypt
 
 auth_bp = Blueprint(
@@ -173,7 +173,7 @@ def request_password():
 
             user = User.query.filter_by(email=form.email.data).scalar()
 
-            user.generate_token_password()
+            send_reset_password(user)
 
             return redirect(url_for('auth.request_password'))
 
@@ -189,8 +189,11 @@ def reset_password(token, id):
     
     form = ResetPasswordForm()
     if form.validate_on_submit():
-        print(form.password.data)
-        user.set_password(form.password.data)
+        password=form.password.data
+        is_valid, error_message = validate_password_policy(password)
+        if not is_valid:
+            flash(error_message, 'danger')
+        user.set_password(password)
         db.session.commit()
 
         return redirect(url_for('auth.login'))
