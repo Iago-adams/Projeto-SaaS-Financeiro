@@ -1,103 +1,3 @@
-{% extends 'base.html' %}
-
-{% block title %}Dashboard{% endblock %}
-{% block head %}
-    <style>
-        /* Container Verde-Água */
-.main-container {
-    background-color: #A8E6CF; /* Cor aproximada do fundo */
-    background: linear-gradient(to bottom, #99E6DA, #b2dfdb); /* Um gradiente leve fica mais bonito */
-    border-radius: 20px;
-    padding: 30px;
-    margin: 20px auto; /* Centraliza na tela */
-    max-width: 1200px; /* Largura máxima para não esticar demais */
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra suave externa */
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-/* Área do Título e Botões */
-.controls-header {
-    display: flex;
-    justify-content: space-between; /* Título na ponta, botões na outra */
-    align-items: center;
-    margin-bottom: 25px;
-    padding: 0 10px;
-}
-
-/* Estilo do Título "Fluxo de Caixa" */
-.page-title {
-    font-size: 2.5rem;
-    font-weight: bold;
-    color: #fff;
-    /* Sombra para dar o efeito de destaque/profundidade da imagem */
-    text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); 
-    margin: 0;
-}
-
-.btn-gerar-relatorio {
-    background-color: #52E252; /* Fundo branco para contraste */
-    color: #ffffff; /* Branco para o texto*/
-    border: none;
-    border-radius: 50px; /* Formato de pílula */
-    padding: 12px 35px; /* Mais gordinho para ser clicável */
-    font-size: 1.1rem;
-    font-weight: 700; /* Negrito para chamar atenção */
-    cursor: pointer;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1); /* Sombra suave */
-    transition: all 0.3s ease; /* Animação suave */
-    display: flex;
-    align-items: center;
-    gap: 10px; /* Espaço entre o ícone e o texto */
-}
-
-/* Efeito ao passar o mouse */
-.btn-gerar-relatorio:hover {
-    transform: translateY(-3px); /* Sobe um pouquinho */
-    box-shadow: 0 6px 15px rgba(0,0,0,0.2); /* Aumenta a sombra */
-    background-color: #3ead3e; /* Um tom levemente esverdeado no branco */
-}
-
-/* Efeito ao clicar */
-.btn-gerar-relatorio:active {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-/* Efeitinho quando passa o mouse */
-.input-wrapper input:hover,
-.input-wrapper select:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-}
-
-/* Card Branco onde fica o gráfico */
-.graph-card {
-    background-color: white;
-    border-radius: 25px;
-    padding: 40px; /* Espaço interno para o gráfico não colar na borda */
-    
-    
-    /* Sombra interna para dar profundidade */
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.05), 0 5px 15px rgba(0,0,0,0.1);
-    
-    /* Altura mínima para garantir que o gráfico tenha espaço */
-    min-height: 500px; 
-    
-    /* Centralizar o gráfico */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-/* Apenas para garantir que o gráfico ocupe o espaço */
-.graph-placeholder {
-    width: 100%;
-    height: 100%;
-    min-height: 400px;
-}
-    </style>
-{% endblock %}
-
 {% block content %}
 <main class="main-container">
     
@@ -105,15 +5,31 @@
         <h1 class="page-title">Fluxo de Caixa</h1>
     
         <button class="btn-gerar-relatorio" onclick="gerarRelatorio()">
-            Gerar Relatório
+            <i class="bi bi-file-earmark-pdf-fill"></i> Gerar Relatório
         </button>
     </div>
 
     <div class="graph-card">
         <div id="meu-grafico-plotly" class="graph-placeholder">
-            {{ graph_extract_line | safe }}
-            </div>
+            {% if graph_extract_line %}
+                {{ graph_extract_line | safe }}
+            {% else %}
+                <div style="text-align: center; padding-top: 150px; color: #666;">
+                    <i class="bi bi-graph-down" style="font-size: 3rem; color: #ccc;"></i>
+                    <h3 style="margin-top: 20px;">Nenhum dado financeiro disponível</h3>
+                    <p>Ainda não há transações registradas para esta conta ou a conexão com o banco está instável.</p>
+                </div>
+            {% endif %}
+        </div>
     </div>
 
 </main>
+
+<script>
+    function gerarRelatorio() {
+        // Redireciona para a rota que dispara o envio do PDF
+        window.location.href = "{{ url_for('cashflow.send_report') }}";
+        alert("O relatório está sendo gerado e será enviado por e-mail em instantes!");
+    }
+</script>
 {% endblock %}
