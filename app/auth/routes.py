@@ -122,11 +122,12 @@ def register_ceo():
         verify_username = User.query.filter_by(username=form.username.data).first()
         if verify_username:
             flash('Nome de usuário já cadastrado no sistema.', 'danger')
-
+            return redirect(url_for('auth.register_ceo'))
         verify_email = User.query.filter_by(email=form.email.data).first()
         if verify_email:
             flash('Email já cadastrado no sistema.', 'danger')
-
+            return redirect(url_for('auth.register_ceo'))
+        
         
         #Cria o usuário CEO
         ceo = User(

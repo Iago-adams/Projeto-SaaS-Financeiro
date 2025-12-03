@@ -40,6 +40,14 @@ def add_member():
     form.role.choices = [(r.id, r.name) for r in roles]
 
     if form.validate_on_submit():
+        verify_username = User.query.filter_by(username=form.username.data).first()
+        if verify_username:
+            flash('Nome de usuário já cadastrado no sistema.', 'danger')
+            return redirect(url_for('ceo.add_member'))
+        verify_email = User.query.filter_by(email=form.email.data).first()
+        if verify_email:
+            flash('Email já cadastrado no sistema.', 'danger')
+            return redirect(url_for('ceo.add_member'))
         user = User(
             username=form.username.data,
             email=form.email.data,
