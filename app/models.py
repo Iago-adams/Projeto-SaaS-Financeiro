@@ -144,7 +144,7 @@ class APIData(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     encrypt_data = db.Column(db.Text, nullable=False)
     last_update = db.Column(db.DateTime, default=datetime.datetime.now)
-    expires = db.Column(db.DateTime, nullable=False)
+    expires = db.Column(db.DateTime, nullable=False) #last update+10 min
     company_id = db.Column(db.Integer, db.ForeignKey('company.id'), nullable=False)
 
     # Relação: Uma APIData pertence a uma única empresa
