@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, IntegerField
+from wtforms import StringField, PasswordField, SubmitField
 from wtforms.validators import DataRequired, EqualTo, Email
 
 class LoginForm(FlaskForm):
@@ -13,7 +13,8 @@ class RegisterCompanyForm(FlaskForm):
     btnSubmit = SubmitField ('Registrar empresa')
 
 class RegisterSecretForm(FlaskForm):
-    acountId = StringField('Identificador da conta', validators=[DataRequired()])
+    agencyId = StringField('Número da agência', validators=[DataRequired()])
+    accountId = StringField('Número da Conta', validators=[DataRequired()])
     clientId = PasswordField('Cliente id', validators=[DataRequired()])
     clientSecret = PasswordField('Client Secret', validators=[DataRequired()])
     btnSubmit = SubmitField ('Cadastrar credenciais')

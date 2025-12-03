@@ -4,6 +4,7 @@ from .forms import LoginForm, RegisterCompanyForm, RegisterSecretForm, RegisterC
 from flask_login import login_user, logout_user, login_required, current_user
 from app import db
 from .utils import create_ceo, validate_password_policy
+from ..services.encryption import encrypt
 
 auth_bp = Blueprint(
     'auth', 
@@ -65,12 +66,15 @@ def register_secrets():
     form = RegisterSecretForm()
 
     if form.validate_on_submit():
-
+        encrClientId = encrypt(form.clientId.data)
+        encrClientSecret = encrypt(form.clientSecret.data)
+        
         #armazena os dados do forms na sessão e armazena como FormsSecrets
         session['FormSecrets'] = {
-            'acount_id': form.acountId.data,
-            'client_id': form.clientId.data,
-            'client_secret': form.clientSecret.data
+            'agency_id': form.agencyId.data,
+            'account_id': form.accountId.data,
+            'client_id': encrClientId,
+            'client_secret': encrClientSecret
         }
 
         return redirect(url_for('auth.register_ceo'))
@@ -104,7 +108,7 @@ def register_ceo():
         secrets = Secrets(**FormSecrets)
         
         #verifica se os secrets ja estao cadastrados
-        verify_account_id = Secrets.query.filter_by(acount_id=secrets.acount_id).first()
+        verify_account_id = Secrets.query.filter_by(account_id=secrets.account_id).first()
         verify_client_id = Secrets.query.filter_by(client_id=secrets.client_id).first()
         if verify_account_id:
             flash('Ocorreu um erro inesperado.', 'danger')
