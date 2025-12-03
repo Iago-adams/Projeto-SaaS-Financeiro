@@ -25,7 +25,7 @@ def send_report():
     tenantAccount_id = current_user.membership.company.secrets.account_id
     tenant_name = current_user.membership.company.name
     
-    send_cashflow_pdf(account_id=tenantAgency_id, agency_id=tenantAccount_id, company_name=tenant_name)#retorna a função para enviar o pdf com extrato bancário do service
+    send_cashflow_pdf(account_id=tenantAccount_id, agency_id=tenantAgency_id, company_name=tenant_name)#retorna a função para enviar o pdf com extrato bancário do service
     return redirect(url_for('cashflow.cashflow'))
 
 #Rota para o teste com o FK
