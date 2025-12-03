@@ -1,35 +1,39 @@
+{% extends 'base.html' %}
+
 {% block content %}
-<main class="main-container">
-    
-    <div class="controls-header">
-        <h1 class="page-title">Fluxo de Caixa</h1>
-    
-        <button class="btn-gerar-relatorio" onclick="gerarRelatorio()">
-            <i class="bi bi-file-earmark-pdf-fill"></i> Gerar Relatório
-        </button>
-    </div>
-
-    <div class="graph-card">
-        <div id="meu-grafico-plotly" class="graph-placeholder">
-            {% if graph_extract_line %}
-                {{ graph_extract_line | safe }}
-            {% else %}
-                <div style="text-align: center; padding-top: 150px; color: #666;">
-                    <i class="bi bi-graph-down" style="font-size: 3rem; color: #ccc;"></i>
-                    <h3 style="margin-top: 20px;">Nenhum dado financeiro disponível</h3>
-                    <p>Ainda não há transações registradas para esta conta ou a conexão com o banco está instável.</p>
-                </div>
-            {% endif %}
+<div>
+    <main class="main-container">
+        
+        <div class="controls-header">
+            <h1 class="page-title">Fluxo de Caixa</h1>
+        
+            <button class="btn-gerar-relatorio" onclick="gerarRelatorio()">
+                <i class="bi bi-file-earmark-pdf-fill"></i> Gerar Relatório
+            </button>
         </div>
-    </div>
 
-</main>
+        <div class="graph-card">
+            <div id="meu-grafico-plotly" class="graph-placeholder">
+                {% if graph_extract_line %}
+                    {{ graph_extract_line | safe }}
+                {% else %}
+                    <div style="text-align: center; padding-top: 150px; color: #666;">
+                        <i class="bi bi-graph-down" style="font-size: 3rem; color: #ccc;"></i>
+                        <h3 style="margin-top: 20px;">Nenhum dado financeiro disponível</h3>
+                        <p>Ainda não há transações registradas para esta conta ou a conexão com o banco está instável.</p>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
 
-<script>
-    function gerarRelatorio() {
-        // Redireciona para a rota que dispara o envio do PDF
-        window.location.href = "{{ url_for('cashflow.send_report') }}";
-        alert("O relatório está sendo gerado e será enviado por e-mail em instantes!");
-    }
-</script>
+    </main>
+
+    <script>
+        function gerarRelatorio() {
+            // Redireciona para a rota que dispara o envio do PDF
+            window.location.href = "{{ url_for('cashflow.send_report') }}";
+            alert("O relatório está sendo gerado e será enviado por e-mail em instantes!");
+        }
+    </script>
+</div>
 {% endblock %}
