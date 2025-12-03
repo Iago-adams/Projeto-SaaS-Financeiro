@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, jsonify, redirect, url_for
+from flask import Blueprint, render_template, jsonify, redirect, url_for, flash
 #from ..decorators import permission_required
 from .services import generate_extract_graph, get_cashflow_kpis_json, send_cashflow_pdf
 from flask_login import login_required, current_user
@@ -23,6 +23,7 @@ def send_report():
     tenant_name = current_user.membership.company.name
     
     send_cashflow_pdf(acount_id = tenant_id, company_name = tenant_name)#retorna a função para enviar o pdf com extrato bancário do service
+    flash("Relatório enviado com sucesso!", "success")
     return redirect(url_for('cashflow.cashflow'))
 
 #Rota para o teste com o FK
