@@ -13,7 +13,7 @@ from werkzeug.security import generate_password_hash
 
 # --- Funções de Email ---
 
-def reset_password(target):
+def send_reset_password(target):
     link = url_for('auth.reset_password', id=target.id, token=target.generate_token_password(), _external=True)
 
     msg = Message(
