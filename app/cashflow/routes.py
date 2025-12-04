@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, jsonify, redirect, url_for, abort
-#from ..decorators import permission_required
+from ..decorators import permission_required
 from .services import generate_extract_graph, get_cashflow_kpis_json, send_cashflow_pdf
 from flask_login import login_required, current_user
 
@@ -11,6 +11,7 @@ cashflow_bp = Blueprint(
 
 #Rota de login de exibir o grafico
 @cashflow_bp.route('/', methods=['GET', 'POST'])
+@permission_required
 def cashflow():
     tenantAgency_id = current_user.membership.company.secrets.agency_id
     tenantAccount_id = current_user.membership.company.secrets.account_id
@@ -20,6 +21,7 @@ def cashflow():
 
 #rota para enviar relatorio
 @cashflow_bp.route('/send-report')
+@permission_required
 def send_report():
     tenantAgency_id = current_user.membership.company.secrets.agency_id
     tenantAccount_id = current_user.membership.company.secrets.account_id
