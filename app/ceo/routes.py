@@ -32,6 +32,7 @@ def ceo_page():
     return render_template('ceo.html', members=members)
 
 @ceo_bp.route('/adicionar/funcionario/', methods=['GET', 'POST'])
+@permission_required
 def add_member():
     form = MemberForm()
 
@@ -76,6 +77,7 @@ def add_member():
     return render_template('add_member.html', form=form)
 
 @ceo_bp.route('/editar/<int:id>/funcionario/', methods=['GET', 'POST'])
+@permission_required
 def edit_member(id):
     user = User.query.get_or_404(id)
     form = EditMemberForm()
@@ -105,6 +107,7 @@ def edit_member(id):
     return render_template('edit_member.html', form=form, user=user)
 
 @ceo_bp.route('/deletar/<int:id>/funcionario/', methods=['POST'])
+@permission_required
 def delete_member(id):
     user = User.query.get(id)
 
@@ -120,6 +123,7 @@ def delete_member(id):
     return abort(404)
 
 @ceo_bp.route('/adicionar/funcao/', methods=['GET', 'POST'])
+@permission_required
 def add_role():
     form = RoleForm()
 

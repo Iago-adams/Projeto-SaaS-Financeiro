@@ -2,7 +2,7 @@ import requests
 import os
 from dotenv import load_dotenv
 from ..services.encryption import decrypt
-from ..models import Secrets
+from ..models import Secrets, APIData
 
 load_dotenv()
 
@@ -96,6 +96,7 @@ def get_financial_JSON(account_id, agency_id):
                 
                 if response.status_code == 200:
                     print("--- SUCESSO: Dados obtidos! ---")
+                    #json = APIData()
                     return response.json()
                 else:
                     print(f"--- FALHA API ({response.status_code}): {response.text} ---")
