@@ -5,7 +5,7 @@ __pycache__/
 venv/
 env/
 .venv/
-.env/  # Oculta o .env com variáveis de ambiente
+.env
 
 instance/
 *.db
